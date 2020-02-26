@@ -8,6 +8,12 @@ import { MatSliderModule } from '@angular/material';
 })
 export class DashboardComponent implements OnInit {
 
+  private spheres = [
+    { title: "Test1", rooms: 3 },
+    { title: "Test2", rooms: 1 },
+    { title: "Test3", rooms: 5 }
+  ]
+
   constructor() { }
 
   ngOnInit() {
