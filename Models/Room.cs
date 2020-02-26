@@ -5,7 +5,7 @@ namespace crud_chat.Models
 {
     public class Room
     {
-        public int RoomId { get; set; }
+        public long RoomId { get; set; }
 
         public string Title { get; set; }
         

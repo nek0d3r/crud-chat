@@ -5,7 +5,7 @@ namespace crud_chat.Models
 {
     public class Sphere
     {
-        public int SphereId { get; set; }
+        public long SphereId { get; set; }
 
         public string Name { get; set; }
 
