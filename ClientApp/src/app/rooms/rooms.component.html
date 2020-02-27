@@ -1,0 +1,10 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Sphere {{ this.sphereId }} title</li>
+    </ol>
+</nav>
+<mat-nav-list>
+    <div *ngFor="let room of rooms">
+        <a mat-list-item [routerLink]="['/spheres', this.sphereId, room.id]">{{ room.title }}</a>
+    </div>
+</mat-nav-list>

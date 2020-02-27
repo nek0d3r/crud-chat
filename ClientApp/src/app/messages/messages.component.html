@@ -1,0 +1,18 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/spheres', sphereId]">Sphere {{ this.sphereId }} title</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Room {{ this.roomId }} title</li>
+    </ol>
+</nav>
+<mat-list>
+    <mat-list-item>Message 1</mat-list-item>
+    <mat-list-item>Message 2</mat-list-item>
+    <mat-list-item fxLayoutAlign="end center"><span>Message 3</span></mat-list-item>
+</mat-list>
+<mat-divider></mat-divider>
+<form>
+    <mat-form-field fxFlex>
+        <input matInput placeholder="Message" />
+    </mat-form-field>
+    <button mat-mini-fab><mat-icon>send</mat-icon></button>
+</form>

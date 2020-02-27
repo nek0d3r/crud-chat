@@ -1,7 +1,10 @@
-<body>
-  <div class="container">
-    It works!
-    <mat-slider min="1" max="5" step="0.5" value="5"></mat-slider>
+<body class="mat-app-background">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span class="container"><a routerLink="">CRUD App</a></span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="container mt-3">
     <router-outlet></router-outlet>
   </div>
 </body>

@@ -1,6 +1,5 @@
-<p>dashboard works!</p>
 <div fxLayout="row">
     <div *ngFor="let sphere of spheres">
-        {{ sphere.title }}
+        <button mat-fab [routerLink]="['/spheres', sphere.id]">{{ sphere.title }}</button>
     </div>
 </div>

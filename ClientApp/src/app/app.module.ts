@@ -14,17 +14,23 @@ import {
   MatInputModule,
   MatFormFieldModule,
   MatSelectModule,
-  MatSliderModule
+  MatSliderModule,
+  MatListModule
 } from '@angular/material';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RoomsComponent } from './rooms/rooms.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    RoomsComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -42,7 +48,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatInputModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatSliderModule
+    MatSliderModule,
+    MatListModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
