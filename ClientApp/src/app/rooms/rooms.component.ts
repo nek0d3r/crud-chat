@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { RoomService } from '../room.service';
+
 import { Room } from '../room';
 
 @Component({
@@ -14,12 +16,17 @@ export class RoomsComponent implements OnInit {
   
   private rooms: Room[];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private roomService: RoomService, private route: ActivatedRoute) {}
 
-  ngOnInit() {
+  getRooms(): void {
+    this.roomService.getRooms().subscribe(_ => this.rooms = _)
+  }
+
+  ngOnInit(): void {
     this.route.paramMap.subscribe(_ => {
       this.sphereId = parseInt(_.get('id'));
     })
+    this.getRooms();
   }
 
 }

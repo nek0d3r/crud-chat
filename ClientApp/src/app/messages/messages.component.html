@@ -5,9 +5,8 @@
     </ol>
 </nav>
 <mat-list>
-    <mat-list-item>Message 1</mat-list-item>
-    <mat-list-item>Message 2</mat-list-item>
-    <mat-list-item fxLayoutAlign="end center"><span>Message 3</span></mat-list-item>
+    <mat-list-item *ngFor="let message of messages">{{ message.content }}</mat-list-item>
+    <mat-list-item fxLayout="row-reverse"><span>Your message</span></mat-list-item>
 </mat-list>
 <mat-divider></mat-divider>
 <form>
