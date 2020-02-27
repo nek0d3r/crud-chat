@@ -7,17 +7,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
   MatCardModule,
-  MatMenuModule,
   MatToolbarModule,
   MatIconModule,
-  MatAutocompleteModule,
   MatInputModule,
   MatFormFieldModule,
-  MatSelectModule,
-  MatSliderModule,
   MatListModule
 } from '@angular/material';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -41,16 +36,11 @@ import { MessagesComponent } from './messages/messages.component';
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
-    MatMenuModule,
     MatToolbarModule,
     MatIconModule,
-    MatAutocompleteModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatListModule,
-    ScrollingModule
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
