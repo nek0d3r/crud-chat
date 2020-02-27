@@ -9,7 +9,7 @@ namespace crud_chat.Models
 
         public string Name { get; set; }
 
-        public List<Room> Rooms { get; set; } = new List<Room>();
+        public List<SphereRooms> Rooms { get; set; } = new List<SphereRooms>();
 
         public DateTime DateCreated { get; set; }
     }

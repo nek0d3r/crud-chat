@@ -8,7 +8,7 @@ using crud_chat.Models;
 namespace crud_chat.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
         private readonly CrudChatContext _context;
@@ -18,7 +18,7 @@ namespace crud_chat.Controllers
             _context = context;
         }
 
-        // GET: Message
+        // GET: api/Message
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetAllMessages()
         {
@@ -30,7 +30,7 @@ namespace crud_chat.Controllers
             };
         }
 
-        // GET: Message/5
+        // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(long id)
         {

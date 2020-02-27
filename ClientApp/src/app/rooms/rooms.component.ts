@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Room } from '../room';
+
 @Component({
   selector: 'app-rooms',
   templateUrl: './rooms.component.html',
@@ -10,11 +12,7 @@ export class RoomsComponent implements OnInit {
 
   private sphereId: number;
   
-  private rooms = [
-    { id: 1, title: "Room1" },
-    { id: 2, title: "Room2" },
-    { id: 3, title: "Room3" }
-  ]
+  private rooms: Room[];
 
   constructor(private route: ActivatedRoute) {}
 

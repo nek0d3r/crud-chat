@@ -9,7 +9,7 @@ namespace crud_chat.Models
 
         public string Title { get; set; }
         
-        public List<Message> Messages { get; set; } = new List<Message>();
+        public List<RoomMessages> Messages { get; set; } = new List<RoomMessages>();
 
         public DateTime DateCreated { get; set; }
     }

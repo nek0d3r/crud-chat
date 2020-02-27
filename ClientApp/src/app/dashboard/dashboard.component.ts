@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { SphereService } from '../sphere.service';
+
+import { Sphere } from '../sphere';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,15 +11,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  private spheres = [
-    { id: 1, title: "Test1", rooms: 3 },
-    { id: 2, title: "Test2", rooms: 1 },
-    { id: 3, title: "Test3", rooms: 5 }
-  ]
+  private spheres: Sphere[];
 
-  constructor() { }
+  constructor(private sphereService: SphereService) { }
+
+  getSpheres(): void {
+    this.sphereService.getSpheres().subscribe(_ => this.spheres = _);
+  }
 
   ngOnInit() {
+    this.getSpheres();
   }
 
 }

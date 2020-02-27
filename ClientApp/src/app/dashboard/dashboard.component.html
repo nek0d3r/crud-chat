@@ -1,5 +1,5 @@
 <div fxLayout="row">
     <div *ngFor="let sphere of spheres">
-        <button mat-fab [routerLink]="['/spheres', sphere.id]">{{ sphere.title }}</button>
+        <button mat-fab [routerLink]="['/spheres', sphere.sphereId]">{{ sphere.name }}</button>
     </div>
 </div>
