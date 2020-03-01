@@ -21,7 +21,7 @@ namespace crud_chat
         public void ConfigureServices(IServiceCollection services)
         {
             // TODO: Change in-memory database to alternative method
-            services.AddDbContext<CrudChatContext>(opt => opt.UseInMemoryDatabase("CrudChat"));
+            services.AddDbContext<CrudChatContext>(opt => opt.UseSqlite("Data Source=crud_chat.db"));
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

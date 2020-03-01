@@ -6,7 +6,11 @@ namespace crud_chat.Models
     {
         public DbSet<Sphere> Spheres { get; set; }
 
+        public DbSet<SphereRooms> SphereRooms { get; set; }
+
         public DbSet<Room> Rooms { get; set; }
+
+        public DbSet<RoomMessages> RoomMessages { get; set; }
 
         public DbSet<Message> Messages { get; set; }
 

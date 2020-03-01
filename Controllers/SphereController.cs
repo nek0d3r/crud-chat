@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
@@ -22,28 +23,26 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sphere>>> GetAllSpheres()
         {
-            await _context.Spheres.ToListAsync();
-            return new List<Sphere> {
-                new Sphere { SphereId = 1, Name = "Test1", DateCreated = DateTime.Now },
-                new Sphere { SphereId = 2, Name = "Test2", DateCreated = DateTime.Now },
-                new Sphere { SphereId = 3, Name = "Test3", DateCreated = DateTime.Now }
-            };
+            return await _context.Spheres.ToListAsync();
         }
 
         // GET: api/Sphere/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Sphere>> GetSphere(long id)
         {
-            await _context.Spheres.FindAsync(id);
-            return new Sphere { SphereId = 1, Name = "Single Sphere Test", DateCreated = DateTime.Now };
+            return await _context.Spheres.FindAsync(id);
         }
 
         // GET: api/Sphere/5/rooms
         [HttpGet("{id}/rooms")]
         public async Task<ActionResult<List<Room>>> GetSphereRooms(long id)
         {
-            await _context.Spheres.FindAsync(id);
-            return new List<Room> { new Room { RoomId = 1, Title = "Room 1", DateCreated = DateTime.Now } };
+            var query = from sphereRoom in _context.Set<SphereRooms>()
+                join room in _context.Set<Room>()
+                on sphereRoom.RoomId equals room.RoomId
+                where sphereRoom.SphereId == id
+                select room;
+            return await query.ToListAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
@@ -22,28 +23,26 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms()
         {
-            await _context.Rooms.ToListAsync();
-            return new List<Room>() {
-                new Room { RoomId = 1, Title = "Test1", DateCreated = DateTime.Now },
-                new Room { RoomId = 2, Title = "Test2", DateCreated = DateTime.Now },
-                new Room { RoomId = 3, Title = "Test3", DateCreated = DateTime.Now }
-            };
+            return await _context.Rooms.ToListAsync();
         }
 
         // GET: api/Room/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> GetRoom(long id)
         {
-            await _context.Rooms.FindAsync(id);
-            return new Room { RoomId = 1, Title = "SingleRoomTest", Messages = new List<RoomMessages>() { new RoomMessages { RoomMessagesId = 1, RoomId = 1, MessageId = 1 } }, DateCreated = DateTime.Now };
+            return await _context.Rooms.FindAsync(id);
         }
 
         // GET: api/Room/5/messages
         [HttpGet("{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> GetRoomMessages(long id)
         {
-            await _context.Rooms.FindAsync(id);
-            return new List<Message>() { new Message { MessageId = 1, Content = "Test message", LastModified = DateTime.Now } };
+            var query = from roomMessage in _context.Set<RoomMessages>()
+                join message in _context.Set<Message>()
+                on roomMessage.MessageId equals message.MessageId
+                where roomMessage.RoomId == id
+                select message;
+            return await query.ToListAsync();
         }
     }
 }
