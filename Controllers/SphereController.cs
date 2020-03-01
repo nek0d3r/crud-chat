@@ -24,9 +24,9 @@ namespace crud_chat.Controllers
         {
             await _context.Spheres.ToListAsync();
             return new List<Sphere> {
-                new Sphere { SphereId = 1, Name = "Test1", Rooms = new List<SphereRooms>() { new SphereRooms { SphereRoomsId = 1, SphereId = 1, RoomId = 1 } }, DateCreated = DateTime.Now },
-                new Sphere { SphereId = 2, Name = "Test2", Rooms = new List<SphereRooms>() { new SphereRooms { SphereRoomsId = 2, SphereId = 2, RoomId = 2 } }, DateCreated = DateTime.Now },
-                new Sphere { SphereId = 3, Name = "Test3", Rooms = new List<SphereRooms>() { new SphereRooms { SphereRoomsId = 3, SphereId = 3, RoomId = 3 } }, DateCreated = DateTime.Now }
+                new Sphere { SphereId = 1, Name = "Test1", DateCreated = DateTime.Now },
+                new Sphere { SphereId = 2, Name = "Test2", DateCreated = DateTime.Now },
+                new Sphere { SphereId = 3, Name = "Test3", DateCreated = DateTime.Now }
             };
         }
 
@@ -35,7 +35,15 @@ namespace crud_chat.Controllers
         public async Task<ActionResult<Sphere>> GetSphere(long id)
         {
             await _context.Spheres.FindAsync(id);
-            return new Sphere { SphereId = 1, Name = "Single Sphere Test", Rooms = new List<SphereRooms>() { new SphereRooms { SphereRoomsId = 1, SphereId = 1, RoomId = 1 } }, DateCreated = DateTime.Now };
+            return new Sphere { SphereId = 1, Name = "Single Sphere Test", DateCreated = DateTime.Now };
+        }
+
+        // GET: api/Sphere/5/rooms
+        [HttpGet("{id}/rooms")]
+        public async Task<ActionResult<List<Room>>> GetSphereRooms(long id)
+        {
+            await _context.Spheres.FindAsync(id);
+            return new List<Room> { new Room { RoomId = 1, Title = "Room 1", DateCreated = DateTime.Now } };
         }
     }
 }

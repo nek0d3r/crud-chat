@@ -18,7 +18,7 @@ namespace crud_chat.Controllers
             _context = context;
         }
 
-        // GET: api/Message
+        // GET: api/Message/all
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetAllMessages()
         {

@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Sphere } from './sphere';
+import { Room } from './room';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,17 @@ export class SphereService {
 
   constructor(private http: HttpClient) { }
 
-  getSpheres(): Observable<Sphere[]> {
+  getAllSpheres(): Observable<Sphere[]> {
     return this.http.get<Sphere[]>(this.sphereUri);
   }
 
   getSphere(id: number): Observable<Sphere> {
     const url = `${this.sphereUri}/${id}`;
     return this.http.get<Sphere>(url);
+  }
+
+  getSphereRooms(id: number): Observable<Room[]> {
+    const url = `${this.sphereUri}/${id}/rooms`;
+    return this.http.get<Room[]>(url);
   }
 }

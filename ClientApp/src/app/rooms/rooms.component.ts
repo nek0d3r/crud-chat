@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { SphereService } from '../sphere.service';
 import { RoomService } from '../room.service';
 
 import { Room } from '../room';
@@ -16,10 +17,13 @@ export class RoomsComponent implements OnInit {
   
   private rooms: Room[];
 
-  constructor(private roomService: RoomService, private route: ActivatedRoute) {}
+  constructor(
+    private sphereService: SphereService,
+    private roomService: RoomService,
+    private route: ActivatedRoute) {}
 
   getRooms(): void {
-    this.roomService.getRooms().subscribe(_ => this.rooms = _)
+    this.sphereService.getSphereRooms(this.sphereId).subscribe(_ => this.rooms = _)
   }
 
   ngOnInit(): void {

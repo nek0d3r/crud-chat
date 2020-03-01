@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   constructor(private sphereService: SphereService) { }
 
   getSpheres(): void {
-    this.sphereService.getSpheres().subscribe(_ => this.spheres = _);
+    this.sphereService.getAllSpheres().subscribe(_ => this.spheres = _);
   }
 
   ngOnInit() {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { RoomService } from '../room.service';
 import { MessageService } from '../message.service';
 
 import { Message } from '../message';
@@ -17,10 +18,13 @@ export class MessagesComponent implements OnInit {
 
   private messages: Message[];
 
-  constructor(private messageService: MessageService, private route: ActivatedRoute) { }
+  constructor(
+    private roomService: RoomService,
+    private messageService: MessageService,
+    private route: ActivatedRoute) { }
 
   getMessages(): void {
-    this.messageService.getMessages().subscribe(_ => this.messages = _);
+    this.roomService.getRoomMessages(this.roomId).subscribe(_ => this.messages = _);
   }
 
   ngOnInit(): void {
