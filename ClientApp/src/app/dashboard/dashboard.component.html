@@ -1,10 +1,18 @@
-<div fxLayout="row">
-    <div *ngFor="let sphere of spheres">
+<div fxLayout="row wrap">
+    <div *ngFor="let sphere of spheres" fxFlex="33">
         <mat-card class="m-3">
             <span>{{ sphere.name }}</span>
             <mat-divider></mat-divider>
-            <p class="py-3">You don't frighten us, English pig dogs. Go and boil your bottoms, you sons of a silly person. I blow my nose at you, so-called "Arthur King," you and all your silly English K-nig-hts. Come and see the violence inherent in the system. Help! Help! I'm being repressed! Listen, strange women lyin' in ponds distributin' swords is no basis for a system of government. Supreme executive power derives from a mandate from the masses, not from some farcical aquatic ceremony. Oh, oh, I see! Running away, eh? You yellow bastards! Come back here and take what's coming to you! I'll bite your legs off!</p>
-            <button mat-button [routerLink]="['/spheres', sphere.sphereId]">Go to sphere</button>
+            <p class="py-3 sphere-desc">You don't frighten us, English pig dogs. Go and boil your bottoms, you sons of a silly person. I blow my nose at you, so-called "Arthur King," you and all your silly English K-nig-hts. Come and see the violence inherent in the system. Help! Help! I'm being repressed! Listen, strange women lyin' in ponds distributin' swords is no basis for a system of government. Supreme executive power derives from a mandate from the masses, not from some farcical aquatic ceremony. Oh, oh, I see! Running away, eh? You yellow bastards! Come back here and take what's coming to you! I'll bite your legs off!</p>
+            <button mat-button color="accent" [routerLink]="['/spheres', sphere.sphereId]">Go to sphere</button>
         </mat-card>
     </div>
+</div>
+<div fxLayout="row-reverse" class="mr-n5">
+    <button mat-fab
+        color="primary"
+        class="static-button"
+        (click)="newSphereModal()">
+        <mat-icon>add</mat-icon>
+    </button>
 </div>

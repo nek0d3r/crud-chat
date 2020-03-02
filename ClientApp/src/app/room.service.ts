@@ -20,17 +20,17 @@ export class RoomService {
   constructor(private http: HttpClient) { }
 
   getAllRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.roomUri);
+    return this.http.get<Room[]>(this.roomUri, this.httpOptions);
   }
 
   getRoom(id: number): Observable<Room> {
     const url = `${this.roomUri}/${id}`;
-    return this.http.get<Room>(url);
+    return this.http.get<Room>(url, this.httpOptions);
   }
 
   getRoomMessages(id: number): Observable<Message[]> {
     const url = `${this.roomUri}/${id}/messages`;
-    return this.http.get<Message[]>(url);
+    return this.http.get<Message[]>(url, this.httpOptions);
   }
 
   postRoomMessage(id: number, message: Message): Observable<Message> {

@@ -56,6 +56,8 @@ namespace crud_chat.Controllers
                 return NotFound();
             }
 
+            _context.Messages.Remove(result);
+
             var roomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
                 where roomMessage.MessageId == id
                 select roomMessage;

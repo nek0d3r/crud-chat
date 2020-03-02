@@ -18,12 +18,12 @@ export class MessageService {
   constructor(private http: HttpClient) { }
 
   getAllMessages(): Observable<Message[]> {
-    return this.http.get<Message[]>(this.messageUri);
+    return this.http.get<Message[]>(this.messageUri, this.httpOptions);
   }
 
   getMessage(id: number): Observable<Message> {
     const url = `${this.messageUri}/${id}`;
-    return this.http.get<Message>(url);
+    return this.http.get<Message>(url, this.httpOptions);
   }
 
   putMessage(id: number, message: Message): Observable<Message> {

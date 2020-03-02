@@ -44,6 +44,15 @@ namespace crud_chat.Controllers
             return await query.ToListAsync();
         }
 
+        // POST: api/Sphere
+        [HttpPost]
+        public async Task<ActionResult<Sphere>> PostSphere(Sphere sphere)
+        {
+            _context.Spheres.Add(sphere);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetSphere), new { id = sphere.SphereId }, sphere);
+        }
+
         // POST: api/Sphere/5/rooms
         [HttpPost("{id}/rooms")]
         public async Task<ActionResult<Room>> PostSphereRoom(long id, Room room)

@@ -11,7 +11,8 @@ import {
   MatIconModule,
   MatInputModule,
   MatFormFieldModule,
-  MatListModule
+  MatListModule,
+  MatDialogModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -19,13 +20,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { MessagesComponent } from './messages/messages.component';
+import { SphereDialogComponent } from './sphere-dialog/sphere-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     RoomsComponent,
-    MessagesComponent
+    MessagesComponent,
+    SphereDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -40,9 +43,11 @@ import { MessagesComponent } from './messages/messages.component';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [SphereDialogComponent]
 })
 export class AppModule { }

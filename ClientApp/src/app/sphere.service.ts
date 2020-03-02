@@ -19,17 +19,21 @@ export class SphereService {
   constructor(private http: HttpClient) { }
 
   getAllSpheres(): Observable<Sphere[]> {
-    return this.http.get<Sphere[]>(this.sphereUri);
+    return this.http.get<Sphere[]>(this.sphereUri, this.httpOptions);
   }
 
   getSphere(id: number): Observable<Sphere> {
     const url = `${this.sphereUri}/${id}`;
-    return this.http.get<Sphere>(url);
+    return this.http.get<Sphere>(url, this.httpOptions);
   }
 
   getSphereRooms(id: number): Observable<Room[]> {
     const url = `${this.sphereUri}/${id}/rooms`;
-    return this.http.get<Room[]>(url);
+    return this.http.get<Room[]>(url, this.httpOptions);
+  }
+
+  postSphere(sphere: Sphere): Observable<Sphere> {
+    return this.http.post<Sphere>(this.sphereUri, sphere, this.httpOptions);
   }
 
   postSphereRoom(id: number, room: Room): Observable<Room> {
