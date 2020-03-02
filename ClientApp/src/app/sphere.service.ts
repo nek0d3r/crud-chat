@@ -31,4 +31,19 @@ export class SphereService {
     const url = `${this.sphereUri}/${id}/rooms`;
     return this.http.get<Room[]>(url);
   }
+
+  postSphereRoom(id: number, room: Room): Observable<Room> {
+    const url = `${this.sphereUri}/${id}/rooms`;
+    return this.http.post<Room>(url, room, this.httpOptions);
+  }
+
+  putSphere(id: number, sphere: Sphere): Observable<Sphere> {
+    const url = `${this.sphereUri}/${id}`;
+    return this.http.put<Sphere>(url, sphere, this.httpOptions);
+  }
+
+  deleteSphere(id: number): void {
+    const url = `${this.sphereUri}/${id}`;
+    this.http.delete(url, this.httpOptions);
+  }
 }

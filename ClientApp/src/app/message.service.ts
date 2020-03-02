@@ -25,4 +25,14 @@ export class MessageService {
     const url = `${this.messageUri}/${id}`;
     return this.http.get<Message>(url);
   }
+
+  putMessage(id: number, message: Message): Observable<Message> {
+    const url = `${this.messageUri}/${id}`;
+    return this.http.put<Message>(url, message, this.httpOptions);
+  }
+
+  deleteMessage(id: number): void {
+    const url = `${this.messageUri}/${id}`;
+    this.http.delete(url, this.httpOptions);
+  }
 }

@@ -32,4 +32,19 @@ export class RoomService {
     const url = `${this.roomUri}/${id}/messages`;
     return this.http.get<Message[]>(url);
   }
+
+  postRoomMessage(id: number, message: Message): Observable<Message> {
+    const url = `${this.roomUri}/${id}/messages`;
+    return this.http.post<Message>(url, message, this.httpOptions);
+  }
+
+  putRoom(id: number, room: Room): Observable<Room> {
+    const url = `${this.roomUri}/${id}`;
+    return this.http.put<Room>(url, room, this.httpOptions);
+  }
+
+  deleteRoom(id: number): void {
+    const url = `${this.roomUri}/${id}`;
+    this.http.delete(url, this.httpOptions);
+  }
 }
