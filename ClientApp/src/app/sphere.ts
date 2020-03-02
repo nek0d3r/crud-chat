@@ -1,6 +1,6 @@
 export class Sphere {
     sphereId: number;
     name: string;
-    rooms: number[];
+    description: string;
     dateCreated: Date;
 }

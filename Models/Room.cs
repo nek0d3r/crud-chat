@@ -8,8 +8,6 @@ namespace crud_chat.Models
         public long RoomId { get; set; }
 
         public string Title { get; set; }
-        
-        public List<RoomMessages> Messages { get; set; } = new List<RoomMessages>();
 
         public DateTime DateCreated { get; set; }
     }

@@ -22,6 +22,20 @@ namespace crud_chat.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoomMessages",
+                columns: table => new
+                {
+                    RoomMessagesId = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoomId = table.Column<long>(nullable: false),
+                    MessageId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomMessages", x => x.RoomMessagesId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Rooms",
                 columns: table => new
                 {
@@ -36,40 +50,6 @@ namespace crud_chat.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Spheres",
-                columns: table => new
-                {
-                    SphereId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Spheres", x => x.SphereId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoomMessages",
-                columns: table => new
-                {
-                    RoomMessagesId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RoomId = table.Column<long>(nullable: false),
-                    MessageId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoomMessages", x => x.RoomMessagesId);
-                    table.ForeignKey(
-                        name: "FK_RoomMessages_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SphereRooms",
                 columns: table => new
                 {
@@ -81,23 +61,22 @@ namespace crud_chat.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SphereRooms", x => x.SphereRoomsId);
-                    table.ForeignKey(
-                        name: "FK_SphereRooms_Spheres_SphereId",
-                        column: x => x.SphereId,
-                        principalTable: "Spheres",
-                        principalColumn: "SphereId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_RoomMessages_RoomId",
-                table: "RoomMessages",
-                column: "RoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SphereRooms_SphereId",
-                table: "SphereRooms",
-                column: "SphereId");
+            migrationBuilder.CreateTable(
+                name: "Spheres",
+                columns: table => new
+                {
+                    SphereId = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Spheres", x => x.SphereId);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -109,10 +88,10 @@ namespace crud_chat.Migrations
                 name: "RoomMessages");
 
             migrationBuilder.DropTable(
-                name: "SphereRooms");
+                name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "SphereRooms");
 
             migrationBuilder.DropTable(
                 name: "Spheres");

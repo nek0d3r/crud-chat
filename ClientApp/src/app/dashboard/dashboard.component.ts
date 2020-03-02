@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   }
 
   addSphere(name: string, desc: string): void {
-    const sphere: Sphere = { sphereId: 0, name: name, dateCreated: new Date(), rooms: [] };
+    const sphere: Sphere = { sphereId: 0, name: name, description: desc, dateCreated: new Date() };
     this.sphereService.postSphere(sphere).subscribe(_ => this.spheres.push(_));
   }
 
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(SphereDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      data => this.addSphere(data.name, data.desc)
+      data => this.addSphere(data.name, data.description)
     );
   }
 

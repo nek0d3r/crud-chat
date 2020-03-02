@@ -64,8 +64,6 @@ namespace crud_chat.Migrations
 
                     b.HasKey("RoomMessagesId");
 
-                    b.HasIndex("RoomId");
-
                     b.ToTable("RoomMessages");
                 });
 
@@ -76,6 +74,9 @@ namespace crud_chat.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -100,27 +101,7 @@ namespace crud_chat.Migrations
 
                     b.HasKey("SphereRoomsId");
 
-                    b.HasIndex("SphereId");
-
                     b.ToTable("SphereRooms");
-                });
-
-            modelBuilder.Entity("crud_chat.Models.RoomMessages", b =>
-                {
-                    b.HasOne("crud_chat.Models.Room", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("crud_chat.Models.SphereRooms", b =>
-                {
-                    b.HasOne("crud_chat.Models.Sphere", null)
-                        .WithMany("Rooms")
-                        .HasForeignKey("SphereId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,9 +1,12 @@
 <div fxLayout="row wrap">
     <div *ngFor="let sphere of spheres" fxFlex="33">
         <mat-card class="m-3">
-            <span>{{ sphere.name }}</span>
+            <div class="mb-3" fxLayoutAlign="space-between center">
+                <span>{{ sphere.name }}</span>
+                <mat-icon (click)="newSphereModal()">more_horiz</mat-icon>
+            </div>
             <mat-divider></mat-divider>
-            <p class="py-3 sphere-desc">You don't frighten us, English pig dogs. Go and boil your bottoms, you sons of a silly person. I blow my nose at you, so-called "Arthur King," you and all your silly English K-nig-hts. Come and see the violence inherent in the system. Help! Help! I'm being repressed! Listen, strange women lyin' in ponds distributin' swords is no basis for a system of government. Supreme executive power derives from a mandate from the masses, not from some farcical aquatic ceremony. Oh, oh, I see! Running away, eh? You yellow bastards! Come back here and take what's coming to you! I'll bite your legs off!</p>
+            <p class="py-3 sphere-desc">{{ sphere.description }}</p>
             <button mat-button color="accent" [routerLink]="['/spheres', sphere.sphereId]">Go to sphere</button>
         </mat-card>
     </div>
