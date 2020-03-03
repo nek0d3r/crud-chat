@@ -1,0 +1,7 @@
+.sphere-desc {
+    height: 350px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 14;
+    -webkit-box-orient: vertical;
+}
