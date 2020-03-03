@@ -1,17 +1,19 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a [routerLink]="['/spheres', sphereId]">{{ this.sphere?.name }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ this.room?.title }}</li>
+        <li class="breadcrumb-item single-line-clamp"><a [routerLink]="['/spheres', sphereId]">{{ this.sphere?.name }}</a></li>
+        <li class="breadcrumb-item active single-line-clamp" aria-current="page">{{ this.room?.title }}</li>
     </ol>
 </nav>
 <mat-list>
-    <mat-list-item fxLayout="row-reverse" *ngFor="let message of messages" class="hover-visible-parent">
+    <mat-list-item *ngFor="let message of messages" class="hover-visible-parent">
         <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="editMessageModal(message)"><mat-icon>edit</mat-icon><span>Edit</span></button>
             <button mat-menu-item (click)="deleteMessageModal(message)"><mat-icon>delete</mat-icon><span>Remove</span></button>
         </mat-menu>
-        <span>{{ message.content }}</span>
-        <button mat-icon-button class="hover-visibility" [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <span >{{ message.content }}</span>
+            <button mat-icon-button class="hover-visibility" [matMenuTriggerFor]="menu"><mat-icon class="align-middle">more_vert</mat-icon></button>
+        </div>
     </mat-list-item>
 </mat-list>
 <mat-divider></mat-divider>

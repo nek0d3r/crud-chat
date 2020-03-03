@@ -8,4 +8,5 @@ button { outline: none !important; }
 .clickable { cursor: pointer; }
 .hover-visible-parent:hover .hover-visibility { visibility: visible; }
 .hover-visibility { visibility: hidden; }
-.sphere-desc { height: 350px; overflow: hidden; }
+.single-line-clamp { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sphere-desc { height: 350px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 14; -webkit-box-orient: vertical; }
