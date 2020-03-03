@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a [routerLink]="['/spheres', sphereId]">Sphere {{ this.sphereId }} title</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Room {{ this.roomId }} title</li>
+        <li class="breadcrumb-item"><a [routerLink]="['/spheres', sphereId]">{{ this.sphere?.name }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ this.room?.title }}</li>
     </ol>
 </nav>
 <mat-list>

@@ -23,6 +23,7 @@ import { RoomsComponent } from './rooms/rooms.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SphereDialogComponent } from './sphere-dialog/sphere-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { RoomDialogComponent } from './room-dialog/room-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     RoomsComponent,
     MessagesComponent,
     SphereDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RoomDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -52,6 +54,6 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SphereDialogComponent, ConfirmDialogComponent]
+  entryComponents: [SphereDialogComponent, RoomDialogComponent, ConfirmDialogComponent]
 })
 export class AppModule { }

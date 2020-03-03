@@ -1,15 +1,23 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Sphere {{ this.sphereId }} title</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ this.sphere?.name }}</li>
     </ol>
 </nav>
 <mat-nav-list>
     <div *ngFor="let room of rooms">
-        <a mat-list-item [routerLink]="['/spheres', this.sphereId, room.roomId]">{{ room.title }}</a>
+        <mat-divider></mat-divider>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <a mat-list-item [routerLink]="['/spheres', this.sphereId, room.roomId]">{{ room.title }}</a>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editRoomModal(room)"><mat-icon>edit</mat-icon><span>Edit</span></button>
+                <button mat-menu-item (click)="deleteRoomModal(room)"><mat-icon>delete</mat-icon><span>Remove</span></button>
+            </mat-menu>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+        </div>
     </div>
 </mat-nav-list>
 <div fxLayout="row-reverse" class="mr-n5">
-    <button mat-fab color="primary" class="static-button">
+    <button mat-fab color="primary" class="static-button" (click)="newRoomModal()">
         <mat-icon>add</mat-icon>
     </button>
 </div>

@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(SphereDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      data => this.addSphere(data.name, data.description)
+      data => { if(data != undefined) this.addSphere(data.name, data.description) }
     );
   }
 
