@@ -70,7 +70,7 @@ export class RoomsComponent implements OnInit {
     const dialogRef = this.dialog.open(RoomDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      data => { if(data != undefined) this.addRoom(data.name) }
+      data => { if(data != undefined) this.addRoom(data.title) }
     );
   }
 

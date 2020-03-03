@@ -6,3 +6,5 @@ button { outline: none !important; }
 .active { color: #BBB !important; }
 .static-button { position: fixed !important; bottom: 50px; }
 .clickable { cursor: pointer; }
+.hover-visible-parent:hover .hover-visibility { visibility: visible; }
+.hover-visibility { visibility: hidden; }

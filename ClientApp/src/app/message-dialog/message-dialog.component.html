@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ this.dialogTitle }}</h2>
+<mat-dialog-content fxLayout="column">
+    <mat-form-field>
+        <input matInput [(ngModel)]="content" placeholder="Message" />
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="mb-2">
+    <button class="mat-raised-button mr-4 px-2" (click)="close()">Close</button>
+    <button class="mat-raised-button mat-accent px-2" (click)="save()">Save</button>
+</mat-dialog-actions>

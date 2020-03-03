@@ -6,7 +6,7 @@
 <mat-nav-list>
     <div *ngFor="let room of rooms">
         <mat-divider></mat-divider>
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="min-width: 0;">
             <a mat-list-item [routerLink]="['/spheres', this.sphereId, room.roomId]">{{ room.title }}</a>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="editRoomModal(room)"><mat-icon>edit</mat-icon><span>Edit</span></button>

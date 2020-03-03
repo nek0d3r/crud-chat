@@ -1,5 +1,5 @@
 export class Message {
-    id: number;
+    messageId: number;
     content: string;
     lastModified: Date;
 }
