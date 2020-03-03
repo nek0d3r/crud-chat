@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
 
   deleteSphere(id: number): void {
     this.sphereService.deleteSphere(id).subscribe(_ => {
-      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)))
+      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
     });
   }
 

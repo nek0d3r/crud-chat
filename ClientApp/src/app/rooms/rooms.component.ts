@@ -48,7 +48,7 @@ export class RoomsComponent implements OnInit {
 
   deleteRoom(id: number): void {
     this.roomService.deleteRoom(id).subscribe(_ => {
-      this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)));
+      this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
     });
   }
 
