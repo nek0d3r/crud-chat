@@ -66,7 +66,7 @@ namespace crud_chat.Controllers
             _context.Entry(room).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return CreatedAtAction(nameof(GetRoom), new { id = room.RoomId }, room);
         }
 
         // DELETE: api/Room/5

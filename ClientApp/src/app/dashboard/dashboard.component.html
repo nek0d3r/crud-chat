@@ -1,13 +1,17 @@
 <div fxLayout="row wrap">
     <div *ngFor="let sphere of spheres" fxFlex="33">
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editSphereModal(sphere)"><mat-icon>edit</mat-icon><span>Edit</span></button>
+            <button mat-menu-item (click)="deleteSphereModal(sphere)"><mat-icon>delete</mat-icon><span>Remove</span></button>
+        </mat-menu>
         <mat-card class="m-3">
             <div class="mb-3" fxLayoutAlign="space-between center">
                 <span>{{ sphere.name }}</span>
-                <mat-icon (click)="newSphereModal()">more_horiz</mat-icon>
+                <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon class="clickable">more_horiz</mat-icon></button>
             </div>
             <mat-divider></mat-divider>
             <p class="py-3 sphere-desc">{{ sphere.description }}</p>
-            <button mat-button color="accent" [routerLink]="['/spheres', sphere.sphereId]">Go to sphere</button>
+            <button mat-button color="accent" [routerLink]="['/spheres', sphere.sphereId]">Enter</button>
         </mat-card>
     </div>
 </div>

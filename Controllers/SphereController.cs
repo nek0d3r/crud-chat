@@ -74,12 +74,12 @@ namespace crud_chat.Controllers
             _context.Entry(sphere).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return CreatedAtAction(nameof(GetSphere), new { id = sphere.SphereId }, sphere);
         }
 
         // DELETE: api/Sphere/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSphere(long id, Sphere sphere)
+        public async Task<IActionResult> DeleteSphere(long id)
         {
             Sphere result = await _context.Spheres.FindAsync(id);
             

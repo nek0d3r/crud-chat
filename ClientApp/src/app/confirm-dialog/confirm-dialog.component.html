@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>{{ this.promptTitle }}</h2>
+<mat-dialog-content>
+    <p>{{ this.promptDetails }}</p>
+</mat-dialog-content>
+<mat-dialog-actions class="mb-2">
+    <button class="mat-raised-button mr-4 px-2" (click)="close()">Cancel</button>
+    <button class="mat-raised-button mat-accent px-2" [ngClass]="this.promptActionColor" (click)="accept()">{{ this.promptAction }}</button>
+</mat-dialog-actions>

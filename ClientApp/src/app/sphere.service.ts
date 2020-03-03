@@ -46,8 +46,8 @@ export class SphereService {
     return this.http.put<Sphere>(url, sphere, this.httpOptions);
   }
 
-  deleteSphere(id: number): void {
+  deleteSphere(id: number): Observable<Sphere> {
     const url = `${this.sphereUri}/${id}`;
-    this.http.delete(url, this.httpOptions);
+    return this.http.delete<Sphere>(url, this.httpOptions);
   }
 }

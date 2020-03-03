@@ -6,6 +6,7 @@ import { SphereService } from '../sphere.service';
 import { Sphere } from '../sphere';
 
 import { SphereDialogComponent } from '../sphere-dialog/sphere-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +30,21 @@ export class DashboardComponent implements OnInit {
     this.sphereService.postSphere(sphere).subscribe(_ => this.spheres.push(_));
   }
 
+  changeSphere(id: number, name: string, desc: string): void {
+    const sphere: Sphere = this.spheres.find(_ => _.sphereId === id);
+    sphere.name = name;
+    sphere.description = desc;
+    this.sphereService.putSphere(id, sphere).subscribe(_ => {
+      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === _.sphereId)), 1, _);
+    });
+  }
+
+  deleteSphere(id: number): void {
+    this.sphereService.deleteSphere(id).subscribe(_ => {
+      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)))
+    });
+  }
+
   ngOnInit() {
     this.getSpheres();
   }
@@ -38,12 +54,53 @@ export class DashboardComponent implements OnInit {
 
     dialogConfig.autoFocus = true;
     dialogConfig.width = '500px';
+    dialogConfig.data = { dialogTitle: "New Sphere", name: "", description: "" };
 
     const dialogRef = this.dialog.open(SphereDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
       data => this.addSphere(data.name, data.description)
     );
+  }
+
+  editSphereModal(sphere: Sphere): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '500px';
+    dialogConfig.data = { dialogTitle: "Edit Sphere", name: sphere.name, description: sphere.description };
+
+    const dialogRef = this.dialog.open(SphereDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(data => {
+      if(data != undefined &&
+        (data.name !== sphere.name || data.description !== sphere.description))
+      {
+        this.changeSphere(sphere.sphereId, data.name, data.description);
+      }
+    });
+  }
+
+  deleteSphereModal(sphere: Sphere): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.width = '500px';
+    dialogConfig.data = {
+      title: 'Remove Sphere',
+      details: 'Are you sure you want to remove this sphere? All rooms and messages will be removed as well. This action cannot be undone.',
+      action: 'Delete',
+      color: 'mat-warn'
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(data => {
+      if(data != undefined &&
+        data.response === true)
+      {
+        this.deleteSphere(sphere.sphereId);
+      }
+    });
   }
 
 }

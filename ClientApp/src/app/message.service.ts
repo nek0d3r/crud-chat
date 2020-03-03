@@ -31,8 +31,8 @@ export class MessageService {
     return this.http.put<Message>(url, message, this.httpOptions);
   }
 
-  deleteMessage(id: number): void {
+  deleteMessage(id: number): Observable<Message> {
     const url = `${this.messageUri}/${id}`;
-    this.http.delete(url, this.httpOptions);
+    return this.http.delete<Message>(url, this.httpOptions);
   }
 }

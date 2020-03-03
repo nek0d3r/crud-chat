@@ -42,7 +42,7 @@ namespace crud_chat.Controllers
             _context.Entry(message).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return CreatedAtAction(nameof(GetMessage), new { id = message.MessageId }, message);
         }
 
         // DELETE: api/Message/5

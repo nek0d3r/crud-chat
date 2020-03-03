@@ -43,8 +43,8 @@ export class RoomService {
     return this.http.put<Room>(url, room, this.httpOptions);
   }
 
-  deleteRoom(id: number): void {
+  deleteRoom(id: number): Observable<Room> {
     const url = `${this.roomUri}/${id}`;
-    this.http.delete(url, this.httpOptions);
+    return this.http.delete<Room>(url, this.httpOptions);
   }
 }

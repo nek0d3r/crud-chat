@@ -7,12 +7,17 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class SphereDialogComponent implements OnInit {
 
-  name: '';
-  description: '';
+  name: string;
+  description: string;
+  dialogTitle: string;
 
   constructor(
     private dialogRef: MatDialogRef<SphereDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data) { }
+    @Inject(MAT_DIALOG_DATA) data) {
+    this.name = data.name;
+    this.description = data.description;
+    this.dialogTitle = data.dialogTitle;
+  }
 
   ngOnInit() {}
 

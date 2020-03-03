@@ -12,7 +12,8 @@ import {
   MatInputModule,
   MatFormFieldModule,
   MatListModule,
-  MatDialogModule
+  MatDialogModule,
+  MatMenuModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -21,6 +22,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SphereDialogComponent } from './sphere-dialog/sphere-dialog.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { SphereDialogComponent } from './sphere-dialog/sphere-dialog.component';
     DashboardComponent,
     RoomsComponent,
     MessagesComponent,
-    SphereDialogComponent
+    SphereDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,10 +47,11 @@ import { SphereDialogComponent } from './sphere-dialog/sphere-dialog.component';
     MatInputModule,
     MatFormFieldModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SphereDialogComponent]
+  entryComponents: [SphereDialogComponent, ConfirmDialogComponent]
 })
 export class AppModule { }
