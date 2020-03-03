@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialogConfig, MatDialog } from '@angular/material';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { SphereService } from '../sphere.service';
-import { RoomService } from '../room.service';
-import { MessageService } from '../message.service';
+import { SphereService } from '@app/services/sphere/sphere.service';
+import { RoomService } from '@app/services/room/room.service';
+import { MessageService } from '@app/services/message/message.service';
 
-import { Sphere } from '../sphere';
-import { Room } from '../room';
-import { Message } from '../message';
+import { Sphere } from '@app/models/sphere/sphere';
+import { Room } from '@app/models/room/room';
+import { Message } from '@app/models/message/message';
 
-import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MessageDialogComponent } from '@app/components/message-dialog/message-dialog.component';
+import { ConfirmDialogComponent } from '@app/components/confirm-dialog/confirm-dialog.component';
+
+import { MessageForm } from '@app/models/message/message-form';
 
 @Component({
   selector: 'app-messages',
@@ -28,14 +31,24 @@ export class MessagesComponent implements OnInit {
 
   private messages: Message[];
 
-  private field: string = '';
+  private messageForm: FormGroup;
 
   constructor(
+    private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private sphereService: SphereService,
     private roomService: RoomService,
     private messageService: MessageService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute) {
+      const messageForm: MessageForm = {
+        content: ''
+      };
+      this.createForm(messageForm);
+    }
+  
+  createForm(messageForm: MessageForm): void {
+    this.messageForm = this.formBuilder.group(messageForm);
+  }
 
   getMessages(): void {
     this.roomService.getRoomMessages(this.roomId).subscribe(_ => this.messages = _);
@@ -72,10 +85,15 @@ export class MessagesComponent implements OnInit {
   }
 
   addMessageEvent(): void {
-    if(this.field !== '')
+    const messageForm: MessageForm = Object.assign({}, this.messageForm.value);
+
+    if(messageForm.content !== '')
     {
-      this.addMessage(this.roomId, this.field);
-      this.field = '';
+      this.addMessage(this.roomId, messageForm.content);
+      const newMessageForm: MessageForm = {
+        content: ''
+      };
+      this.messageForm = this.formBuilder.group(newMessageForm);
     }
   }
 

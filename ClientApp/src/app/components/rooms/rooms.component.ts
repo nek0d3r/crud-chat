@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 
-import { SphereService } from '../sphere.service';
-import { RoomService } from '../room.service';
+import { SphereService } from '@app/services/sphere/sphere.service';
+import { RoomService } from '@app/services/room/room.service';
 
-import { Sphere } from '../sphere';
-import { Room } from '../room';
+import { Sphere } from '@app/models/sphere/sphere';
+import { Room } from '@app/models/room/room';
 
-import { RoomDialogComponent } from '../room-dialog/room-dialog.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { RoomDialogComponent } from '@app/components/room-dialog/room-dialog.component';
+import { ConfirmDialogComponent } from '@app/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-rooms',

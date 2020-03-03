@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { RoomsComponent } from './rooms/rooms.component';
-import { MessagesComponent } from './messages/messages.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RoomsComponent } from './components/rooms/rooms.component';
+import { MessagesComponent } from './components/messages/messages.component';
 
 const routes: Routes = [
   { path: 'spheres', component: DashboardComponent },

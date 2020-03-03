@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -16,15 +16,15 @@ import {
   MatMenuModule
 } from '@angular/material';
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { RoomsComponent } from './rooms/rooms.component';
-import { MessagesComponent } from './messages/messages.component';
-import { SphereDialogComponent } from './sphere-dialog/sphere-dialog.component';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { RoomDialogComponent } from './room-dialog/room-dialog.component';
-import { MessageDialogComponent } from './message-dialog/message-dialog.component';
+import { AppComponent } from '@app/app.component';
+import { AppRoutingModule } from '@app/app-routing.module';
+import { DashboardComponent } from '@app/components/dashboard/dashboard.component';
+import { RoomsComponent } from '@app/components/rooms/rooms.component';
+import { MessagesComponent } from '@app/components/messages/messages.component';
+import { SphereDialogComponent } from '@app/components/sphere-dialog/sphere-dialog.component';
+import { ConfirmDialogComponent } from '@app/components/confirm-dialog/confirm-dialog.component';
+import { RoomDialogComponent } from '@app/components/room-dialog/room-dialog.component';
+import { MessageDialogComponent } from '@app/components/message-dialog/message-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +41,7 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,

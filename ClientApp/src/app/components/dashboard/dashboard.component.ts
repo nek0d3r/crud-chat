@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 
-import { SphereService } from '../sphere.service';
+import { SphereService } from '@app/services/sphere/sphere.service';
 
-import { Sphere } from '../sphere';
+import { Sphere } from '@app/models/sphere/sphere';
 
-import { SphereDialogComponent } from '../sphere-dialog/sphere-dialog.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { SphereDialogComponent } from '@app/components/sphere-dialog/sphere-dialog.component';
+import { ConfirmDialogComponent } from '@app/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
