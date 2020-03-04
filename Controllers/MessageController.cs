@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using crud_chat.Models;
+using crud_chat.Services;
 
 namespace crud_chat.Controllers
 {
@@ -11,25 +10,30 @@ namespace crud_chat.Controllers
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
-        private readonly CrudChatContext _context;
+        private readonly MessageService _messageService;
 
-        public MessageController(CrudChatContext context)
-        {
-            _context = context;
-        }
+        public MessageController(MessageService messageService) => _messageService = messageService;
 
         // GET: api/Message/all
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetAllMessages()
         {
-            return await _context.Messages.ToListAsync();
+            ActionResult<IEnumerable<Message>> result = await _messageService.GetAll();
+            if(result == null)
+                return StatusCode(500);
+            else
+                return result;
         }
 
         // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(long id)
         {
-            return await _context.Messages.FindAsync(id);
+            ActionResult<Message> result = await _messageService.Get(id);
+            if(result == null)
+                return StatusCode(500);
+            else
+                return await _messageService.Get(id);
         }
 
         // PUT: api/Message/5
@@ -39,34 +43,26 @@ namespace crud_chat.Controllers
             if(id != message.MessageId)
                 return BadRequest();
             
-            _context.Entry(message).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMessage), new { id = message.MessageId }, message);
+            bool ok = await _messageService.Change(message);
+            if(!ok)
+                return StatusCode(500);
+            else
+                return CreatedAtAction(nameof(GetMessage), new { id = message.MessageId }, message);
         }
 
         // DELETE: api/Message/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(long id)
         {
-            Message result = await _context.Messages.FindAsync(id);
-
-            if(result == null)
+            switch(await _messageService.Delete(id))
             {
-                return NotFound();
+                case ResultType.NotFound:
+                    return NotFound();
+                case ResultType.Ok:
+                    return NoContent();
+                default:
+                    return StatusCode(500);
             }
-
-            _context.Messages.Remove(result);
-
-            var roomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
-                where roomMessage.MessageId == id
-                select roomMessage;
-            var roomMessages = await roomMessageQuery.ToListAsync();
-            _context.RoomMessages.RemoveRange(roomMessages);
-
-            await _context.SaveChangesAsync();
-            
-            return NoContent();
         }
     }
 }

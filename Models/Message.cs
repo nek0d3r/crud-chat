@@ -2,7 +2,7 @@ using System;
 
 namespace crud_chat.Models
 {
-    public class Message
+    public class Message : IModel
     {
         public long MessageId { get; set; }
 

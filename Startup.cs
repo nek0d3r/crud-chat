@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
+using crud_chat.Services;
 
 namespace crud_chat
 {
@@ -20,8 +21,8 @@ namespace crud_chat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO: Change in-memory database to alternative method
             services.AddDbContext<CrudChatContext>(opt => opt.UseSqlite("Data Source=crud_chat.db"));
+            services.AddScoped<MessageService>();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
