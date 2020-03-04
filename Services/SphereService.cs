@@ -7,18 +7,18 @@ using crud_chat.Models;
 
 namespace crud_chat.Services
 {
-    public class RoomService : IBLLService
+    public class SphereService : IBLLService
     {
         private CrudChatContext _context { get; set; }
 
-        public RoomService(CrudChatContext context) => _context = context;
+        public SphereService(CrudChatContext context) => _context = context;
 
         public async Task<ActionResult<IEnumerable<IModel>>> GetAll()
         {
             if(_context == null)
                 return null;
             
-            return await _context.Rooms.ToListAsync();
+            return await _context.Spheres.ToListAsync();
         }
 
         public async Task<ActionResult<IModel>> Get(long id)
@@ -26,62 +26,50 @@ namespace crud_chat.Services
             if(_context == null)
                 return null;
             
-            return await _context.Rooms.FindAsync(id);
+            return await _context.Spheres.FindAsync(id);
         }
 
-        public async Task<ActionResult<IEnumerable<IModel>>> Get(IEnumerable<long> rooms)
-        {
-            if(_context == null)
-                return null;
-
-            var selectRoomQuery = from room in _context.Set<Room>()
-                where rooms.Contains(room.RoomId)
-                select room;
-            
-            return await selectRoomQuery.ToListAsync();
-        }
-
-        public async Task<IEnumerable<long>> GetMessages(long id)
+        public async Task<IEnumerable<long>> GetRooms(long id)
         {
             if(_context == null)
                 return null;
             
-            var messageSelectQuery = from roomMessages in _context.Set<RoomMessages>()
-                where roomMessages.RoomId == id
-                select roomMessages.MessageId;
+            var roomSelectQuery = from sphereRooms in _context.Set<SphereRooms>()
+                where sphereRooms.SphereId == id
+                select sphereRooms.RoomId;
             
-            return await messageSelectQuery.ToListAsync();
+            return await roomSelectQuery.ToListAsync();
         }
 
-        public async Task<bool> Add(IModel room)
+        public async Task<bool> Add(Sphere sphere)
         {
             if(_context == null)
                 return false;
             
+            _context.Spheres.Add(sphere);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> AddRoom(long id, IModel room)
+        {
+            if(_context == null)
+                return false;
+            
+            _context.SphereRooms.Add(new SphereRooms { SphereId = id, RoomId = ((Room) room).RoomId });
             _context.Rooms.Add((Room) room);
             await _context.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<bool> AddMessage(long id, IModel message)
+        public async Task<bool> Change(IModel sphere)
         {
             if(_context == null)
                 return false;
             
-            _context.RoomMessages.Add(new RoomMessages { RoomId = id, MessageId = ((Message) message).MessageId });
-            _context.Messages.Add((Message) message);
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<bool> Change(IModel room)
-        {
-            if(_context == null)
-                return false;
-            
-            _context.Entry((Room) room).State = EntityState.Modified;
+            _context.Entry((Sphere) sphere).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return true;
@@ -92,23 +80,33 @@ namespace crud_chat.Services
             if(_context == null)
                 return ResultType.ContextError;
             
-            Room room = await _context.Rooms.FindAsync(id);
+            Sphere sphere = await _context.Spheres.FindAsync(id);
 
-            if(room == null)
+            if(sphere == null)
             {
                 return ResultType.NotFound;
             }
 
-            _context.Rooms.Remove(room);
+            _context.Spheres.Remove(sphere);
 
             var sphereRoomQuery = from sphereRoom in _context.Set<SphereRooms>()
-                where sphereRoom.RoomId == id
+                where sphereRoom.SphereId == id
                 select sphereRoom;
             var sphereRooms = await sphereRoomQuery.ToListAsync();
             _context.SphereRooms.RemoveRange(sphereRooms);
 
+            var roomQuery = from sphereRoom in _context.Set<SphereRooms>()
+                join room in _context.Set<Room>()
+                on sphereRoom.RoomId equals room.RoomId
+                where sphereRoom.SphereId == id
+                select room;
+            var rooms = await roomQuery.ToListAsync();
+            _context.Rooms.RemoveRange(rooms);
+
             var roomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
-                where roomMessage.RoomId == id
+                join sphereRoom in _context.Set<SphereRooms>()
+                on roomMessage.RoomId equals sphereRoom.RoomId
+                where sphereRoom.SphereId == id
                 select roomMessage;
             var roomMessages = await roomMessageQuery.ToListAsync();
             _context.RoomMessages.RemoveRange(roomMessages);
@@ -116,7 +114,9 @@ namespace crud_chat.Services
             var messageQuery = from message in _context.Set<Message>()
                 join roomMessage in _context.Set<RoomMessages>()
                 on message.MessageId equals roomMessage.MessageId
-                where roomMessage.RoomId == id
+                join sphereRoom in _context.Set<SphereRooms>()
+                on roomMessage.RoomId equals sphereRoom.SphereId
+                where sphereRoom.SphereId == id
                 select message;
             var messages = await messageQuery.ToListAsync();
             _context.Messages.RemoveRange(messages);

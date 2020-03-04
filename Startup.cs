@@ -27,6 +27,7 @@ namespace crud_chat
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CrudChatContext>(opt => opt.UseSqlite("Data Source=crud_chat.db"));
+            services.AddTransient<SphereService>();
             services.AddTransient<RoomService>();
             services.AddTransient<MessageService>();
 
@@ -34,6 +35,8 @@ namespace crud_chat
             {
                 switch(key)
                 {
+                    case ServiceType.SPHERE:
+                        return serviceProvider.GetService<SphereService>();
                     case ServiceType.ROOM:
                         return serviceProvider.GetService<RoomService>();
                     case ServiceType.MESSAGE:
