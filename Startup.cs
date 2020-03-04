@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,10 @@ using crud_chat.Services;
 
 namespace crud_chat
 {
+    public enum ServiceType { SPHERE, ROOM, MESSAGE };
+
+    public delegate IBLLService ServiceResolver(ServiceType key);
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -22,7 +27,21 @@ namespace crud_chat
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CrudChatContext>(opt => opt.UseSqlite("Data Source=crud_chat.db"));
-            services.AddScoped<MessageService>();
+            services.AddTransient<RoomService>();
+            services.AddTransient<MessageService>();
+
+            services.AddTransient<ServiceResolver>(serviceProvider => key =>
+            {
+                switch(key)
+                {
+                    case ServiceType.ROOM:
+                        return serviceProvider.GetService<RoomService>();
+                    case ServiceType.MESSAGE:
+                        return serviceProvider.GetService<MessageService>();
+                    default:
+                        throw new KeyNotFoundException();
+                }
+            });
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

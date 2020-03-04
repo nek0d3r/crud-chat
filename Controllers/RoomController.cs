@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
+using crud_chat.Services;
 
 namespace crud_chat.Controllers
 {
@@ -12,48 +10,57 @@ namespace crud_chat.Controllers
     [Route("api/[controller]")]
     public class RoomController : ControllerBase
     {
-        private readonly CrudChatContext _context;
+        private readonly RoomService _roomService;
+        private readonly MessageService _messageService;
 
-        public RoomController(CrudChatContext context)
+        public RoomController(ServiceResolver serviceAccessor)
         {
-            _context = context;
+            _roomService = (RoomService) serviceAccessor(ServiceType.ROOM);
+            _messageService = (MessageService) serviceAccessor(ServiceType.MESSAGE);
         }
 
         // GET: api/Room
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms()
+        public async Task<ActionResult<IEnumerable<IModel>>> GetAllRooms()
         {
-            return await _context.Rooms.ToListAsync();
+            ActionResult<IEnumerable<IModel>> result = await _roomService.GetAll();
+            if(result == null)
+                return StatusCode(500);
+            else
+                return result;
         }
 
         // GET: api/Room/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(long id)
+        public async Task<ActionResult<IModel>> GetRoom(long id)
         {
-            return await _context.Rooms.FindAsync(id);
+            ActionResult<IModel> result = await _roomService.Get(id);
+            if(result == null)
+                return StatusCode(500);
+            else
+                return await _roomService.Get(id);
         }
 
         // GET: api/Room/5/messages
         [HttpGet("{id}/messages")]
-        public async Task<ActionResult<IEnumerable<Message>>> GetRoomMessages(long id)
+        public async Task<ActionResult<IEnumerable<IModel>>> GetRoomMessages(long id)
         {
-            var query = from roomMessage in _context.Set<RoomMessages>()
-                join message in _context.Set<Message>()
-                on roomMessage.MessageId equals message.MessageId
-                where roomMessage.RoomId == id
-                select message;
-            return await query.ToListAsync();
+            IEnumerable<long> roomMessages = await _roomService.GetMessages(id);
+            if(roomMessages == null)
+                return StatusCode(500);
+            else
+                return await _messageService.Get(roomMessages);
         }
 
         // POST: api/Room/5/messages
         [HttpPost("{id}/messages")]
         public async Task<ActionResult<Message>> PostRoomMessage(long id, Message message)
         {
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
-            _context.RoomMessages.Add(new RoomMessages { RoomId = id, MessageId = message.MessageId });
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(MessageController.GetMessage), new { id = message.MessageId }, message);
+            bool ok = await _roomService.AddMessage(id, message);
+            if(!ok)
+                return StatusCode(500);
+            else
+                return CreatedAtAction(nameof(MessageController.GetMessage), new { id = message.MessageId }, message);
         }
 
         // PUT: api/Room/5
@@ -63,48 +70,26 @@ namespace crud_chat.Controllers
             if(id != room.RoomId)
                 return BadRequest();
             
-            _context.Entry(room).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetRoom), new { id = room.RoomId }, room);
+            bool ok = await _roomService.Change(room);
+            if(!ok)
+                return StatusCode(500);
+            else
+                return CreatedAtAction(nameof(GetRoom), new { id = room.RoomId }, room);
         }
 
         // DELETE: api/Room/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoom(long id)
         {
-            Room result = await _context.Rooms.FindAsync(id);
-
-            if(result == null)
+            switch(await _roomService.Delete(id))
             {
-                return NotFound();
+                case ResultType.NotFound:
+                    return NotFound();
+                case ResultType.Ok:
+                    return NoContent();
+                default:
+                    return StatusCode(500);
             }
-
-            _context.Rooms.Remove(result);
-
-            var sphereRoomQuery = from sphereRoom in _context.Set<SphereRooms>()
-                where sphereRoom.RoomId == id
-                select sphereRoom;
-            var sphereRooms = await sphereRoomQuery.ToListAsync();
-            _context.SphereRooms.RemoveRange(sphereRooms);
-
-            var roomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
-                where roomMessage.RoomId == id
-                select roomMessage;
-            var roomMessages = await roomMessageQuery.ToListAsync();
-            _context.RoomMessages.RemoveRange(roomMessages);
-
-            var messageQuery = from message in _context.Set<Message>()
-                join roomMessage in _context.Set<RoomMessages>()
-                on message.MessageId equals roomMessage.MessageId
-                where roomMessage.RoomId == id
-                select message;
-            var messages = await messageQuery.ToListAsync();
-            _context.Messages.RemoveRange(messages);
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
     }
 }

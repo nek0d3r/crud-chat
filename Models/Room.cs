@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace crud_chat.Models
 {
-    public class Room
+    public class Room : IModel
     {
         public long RoomId { get; set; }
 

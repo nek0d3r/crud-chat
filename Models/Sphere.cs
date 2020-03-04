@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace crud_chat.Models
 {
-    public class Sphere
+    public class Sphere : IModel
     {
         public long SphereId { get; set; }
 

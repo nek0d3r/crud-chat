@@ -12,7 +12,7 @@ namespace crud_chat.Controllers
     {
         private readonly MessageService _messageService;
 
-        public MessageController(MessageService messageService) => _messageService = messageService;
+        public MessageController(ServiceResolver serviceAccessor) => _messageService = (MessageService) serviceAccessor(ServiceType.MESSAGE);
 
         // GET: api/Message/all
         [HttpGet]

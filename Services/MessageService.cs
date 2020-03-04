@@ -29,6 +29,18 @@ namespace crud_chat.Services
             return await _context.Messages.FindAsync(id);
         }
 
+        public async Task<ActionResult<IEnumerable<IModel>>> Get(IEnumerable<long> messages)
+        {
+            if(_context == null)
+                return null;
+
+            var selectMessageQuery = from message in _context.Set<Message>()
+                where messages.Contains(message.MessageId)
+                select message;
+            
+            return await selectMessageQuery.ToListAsync();
+        }
+
         public async Task<bool> Add(IModel message)
         {
             if(_context == null)
