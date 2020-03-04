@@ -75,16 +75,16 @@ namespace crud_chat.Services
             return true;
         }
 
-        public async Task<ResultType> Delete(long id)
+        public async Task<List<long>> Delete(long id)
         {
             if(_context == null)
-                return ResultType.ContextError;
+                return null;
             
             Sphere sphere = await _context.Spheres.FindAsync(id);
 
             if(sphere == null)
             {
-                return ResultType.NotFound;
+                return new List<long>();
             }
 
             _context.Spheres.Remove(sphere);
@@ -103,27 +103,16 @@ namespace crud_chat.Services
             var rooms = await roomQuery.ToListAsync();
             _context.Rooms.RemoveRange(rooms);
 
-            var roomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
-                join sphereRoom in _context.Set<SphereRooms>()
-                on roomMessage.RoomId equals sphereRoom.RoomId
+            var roomListQuery = from sphereRoom in _context.Set<SphereRooms>()
+                join room in _context.Set<Room>()
+                on sphereRoom.RoomId equals room.RoomId
                 where sphereRoom.SphereId == id
-                select roomMessage;
-            var roomMessages = await roomMessageQuery.ToListAsync();
-            _context.RoomMessages.RemoveRange(roomMessages);
-
-            var messageQuery = from message in _context.Set<Message>()
-                join roomMessage in _context.Set<RoomMessages>()
-                on message.MessageId equals roomMessage.MessageId
-                join sphereRoom in _context.Set<SphereRooms>()
-                on roomMessage.RoomId equals sphereRoom.SphereId
-                where sphereRoom.SphereId == id
-                select message;
-            var messages = await messageQuery.ToListAsync();
-            _context.Messages.RemoveRange(messages);
+                select room.RoomId;
+            List<long> result = await roomListQuery.ToListAsync();
 
             await _context.SaveChangesAsync();
 
-            return ResultType.Ok;
+            return result;
         }
     }
 }

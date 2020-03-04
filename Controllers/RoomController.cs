@@ -81,10 +81,14 @@ namespace crud_chat.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoom(long id)
         {
-            switch(await _roomService.Delete(id))
+            List<long> messages = await _roomService.Delete(new List<long>() { id });
+            if(messages == null)
+                return StatusCode(500);
+            if(messages.Count == 0)
+                return NoContent();
+            
+            switch(await _messageService.Delete(messages))
             {
-                case ResultType.NotFound:
-                    return NotFound();
                 case ResultType.Ok:
                     return NoContent();
                 default:

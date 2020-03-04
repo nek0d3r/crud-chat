@@ -12,11 +12,13 @@ namespace crud_chat.Controllers
     {
         private readonly SphereService _sphereService;
         private readonly RoomService _roomService;
+        private readonly MessageService _messageService;
 
         public SphereController(ServiceResolver serviceResolver)
         {
-            _sphereService = (SphereService)serviceResolver(ServiceType.SPHERE);
-            _roomService = (RoomService)serviceResolver(ServiceType.ROOM);
+            _sphereService = (SphereService) serviceResolver(ServiceType.SPHERE);
+            _roomService = (RoomService) serviceResolver(ServiceType.ROOM);
+            _messageService = (MessageService) serviceResolver(ServiceType.MESSAGE);
         }
 
         // GET: api/Sphere
@@ -92,10 +94,20 @@ namespace crud_chat.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSphere(long id)
         {
-            switch(await _sphereService.Delete(id))
+            List<long> rooms = await _sphereService.Delete(id);
+            if(rooms == null)
+                return StatusCode(500);
+            if(rooms.Count == 0)
+                return NoContent();
+            
+            List<long> messages = await _roomService.Delete(rooms);
+            if(messages == null)
+                return StatusCode(500);
+            if(messages.Count == 0)
+                return NoContent();
+            
+            switch(await _messageService.Delete(messages))
             {
-                case ResultType.NotFound:
-                    return NotFound();
                 case ResultType.Ok:
                     return NoContent();
                 default:

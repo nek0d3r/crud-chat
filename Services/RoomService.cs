@@ -87,43 +87,35 @@ namespace crud_chat.Services
             return true;
         }
 
-        public async Task<ResultType> Delete(long id)
+        public async Task<List<long>> Delete(IEnumerable<long> rooms)
         {
             if(_context == null)
-                return ResultType.ContextError;
+                return null;
             
-            Room room = await _context.Rooms.FindAsync(id);
-
-            if(room == null)
-            {
-                return ResultType.NotFound;
-            }
-
-            _context.Rooms.Remove(room);
-
-            var sphereRoomQuery = from sphereRoom in _context.Set<SphereRooms>()
-                where sphereRoom.RoomId == id
-                select sphereRoom;
-            var sphereRooms = await sphereRoomQuery.ToListAsync();
-            _context.SphereRooms.RemoveRange(sphereRooms);
-
-            var roomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
-                where roomMessage.RoomId == id
+            var selectRoomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
+                join room in _context.Set<Room>()
+                on roomMessage.RoomId equals room.RoomId
+                where rooms.Contains(room.RoomId)
                 select roomMessage;
-            var roomMessages = await roomMessageQuery.ToListAsync();
-            _context.RoomMessages.RemoveRange(roomMessages);
+            var roomMessagesResult = await selectRoomMessageQuery.ToListAsync();
+            _context.RoomMessages.RemoveRange(roomMessagesResult);
 
-            var messageQuery = from message in _context.Set<Message>()
-                join roomMessage in _context.Set<RoomMessages>()
-                on message.MessageId equals roomMessage.MessageId
-                where roomMessage.RoomId == id
-                select message;
-            var messages = await messageQuery.ToListAsync();
-            _context.Messages.RemoveRange(messages);
+            var selectRoomQuery = from room in _context.Set<Room>()
+                where rooms.Contains(room.RoomId)
+                select room;
+            var roomsResult = await selectRoomQuery.ToListAsync();
+            _context.Rooms.RemoveRange(roomsResult);
 
+            var selectMessageListQuery = from roomMessage in _context.Set<RoomMessages>()
+                join room in _context.Set<Room>()
+                on roomMessage.RoomId equals room.RoomId
+                where rooms.Contains(room.RoomId)
+                select roomMessage.MessageId;
+            List<long> result = await selectMessageListQuery.ToListAsync();
+            
             await _context.SaveChangesAsync();
 
-            return ResultType.Ok;
+            return result;
         }
     }
 }
