@@ -16,9 +16,9 @@ namespace crud_chat.Controllers
 
         // GET: api/Message/all
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetAllMessages()
+        public async Task<ActionResult<IEnumerable<IModel>>> GetAllMessages()
         {
-            ActionResult<IEnumerable<Message>> result = await _messageService.GetAll();
+            ActionResult<IEnumerable<IModel>> result = await _messageService.GetAll();
             if(result == null)
                 return StatusCode(500);
             else
@@ -27,9 +27,9 @@ namespace crud_chat.Controllers
 
         // GET: api/Message/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(long id)
+        public async Task<ActionResult<IModel>> GetMessage(long id)
         {
-            ActionResult<Message> result = await _messageService.Get(id);
+            ActionResult<IModel> result = await _messageService.Get(id);
             if(result == null)
                 return StatusCode(500);
             else
