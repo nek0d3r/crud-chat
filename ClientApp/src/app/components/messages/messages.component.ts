@@ -121,7 +121,7 @@ export class MessagesComponent implements OnInit {
     dialogConfig.width = '500px';
     dialogConfig.data = {
       title: 'Remove Message',
-      details: `Are you sure you want to remove this message:<br />${message.content}`,
+      details: `Are you sure you want to remove this message:<br/>${message.content}`,
       action: 'Delete',
       color: 'mat-accent'
     }
