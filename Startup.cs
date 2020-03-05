@@ -26,7 +26,7 @@ namespace crud_chat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CrudChatContext>(opt => opt.UseSqlite("Data Source=crud_chat.db"));
+            services.AddDbContext<CrudChatContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("CrudChatDB")));
             services.AddTransient<SphereService>();
             services.AddTransient<RoomService>();
             services.AddTransient<MessageService>();

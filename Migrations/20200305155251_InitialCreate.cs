@@ -12,7 +12,7 @@ namespace crud_chat.Migrations
                 columns: table => new
                 {
                     MessageId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(nullable: true),
                     LastModified = table.Column<DateTime>(nullable: false)
                 },
@@ -26,7 +26,7 @@ namespace crud_chat.Migrations
                 columns: table => new
                 {
                     RoomMessagesId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoomId = table.Column<long>(nullable: false),
                     MessageId = table.Column<long>(nullable: false)
                 },
@@ -40,7 +40,7 @@ namespace crud_chat.Migrations
                 columns: table => new
                 {
                     RoomId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false)
                 },
@@ -54,7 +54,7 @@ namespace crud_chat.Migrations
                 columns: table => new
                 {
                     SphereRoomsId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     SphereId = table.Column<long>(nullable: false),
                     RoomId = table.Column<long>(nullable: false)
                 },
@@ -68,7 +68,7 @@ namespace crud_chat.Migrations
                 columns: table => new
                 {
                     SphereId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false)
