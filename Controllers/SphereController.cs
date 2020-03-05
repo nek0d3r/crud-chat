@@ -40,7 +40,7 @@ namespace crud_chat.Controllers
             if(result == null)
                 return StatusCode(500);
             else
-                return await _roomService.Get(id);
+                return await _sphereService.Get(id);
         }
 
         // GET: api/Sphere/5/rooms
@@ -70,6 +70,7 @@ namespace crud_chat.Controllers
         public async Task<ActionResult<IModel>> PostSphereRoom(long id, Room room)
         {
             bool ok = await _sphereService.AddRoom(id, room);
+            
             if(!ok)
                 return StatusCode(500);
             else

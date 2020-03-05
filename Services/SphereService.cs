@@ -57,8 +57,9 @@ namespace crud_chat.Services
             if(_context == null)
                 return false;
             
-            _context.SphereRooms.Add(new SphereRooms { SphereId = id, RoomId = ((Room) room).RoomId });
             _context.Rooms.Add((Room) room);
+            await _context.SaveChangesAsync();
+            _context.SphereRooms.Add(new SphereRooms { SphereId = id, RoomId = ((Room) room).RoomId });
             await _context.SaveChangesAsync();
 
             return true;
@@ -94,14 +95,6 @@ namespace crud_chat.Services
                 select sphereRoom;
             var sphereRooms = await sphereRoomQuery.ToListAsync();
             _context.SphereRooms.RemoveRange(sphereRooms);
-
-            var roomQuery = from sphereRoom in _context.Set<SphereRooms>()
-                join room in _context.Set<Room>()
-                on sphereRoom.RoomId equals room.RoomId
-                where sphereRoom.SphereId == id
-                select room;
-            var rooms = await roomQuery.ToListAsync();
-            _context.Rooms.RemoveRange(rooms);
 
             var roomListQuery = from sphereRoom in _context.Set<SphereRooms>()
                 join room in _context.Set<Room>()

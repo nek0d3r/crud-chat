@@ -69,8 +69,9 @@ namespace crud_chat.Services
             if(_context == null)
                 return false;
             
-            _context.RoomMessages.Add(new RoomMessages { RoomId = id, MessageId = ((Message) message).MessageId });
             _context.Messages.Add((Message) message);
+            await _context.SaveChangesAsync();
+            _context.RoomMessages.Add(new RoomMessages { RoomId = id, MessageId = ((Message) message).MessageId });
             await _context.SaveChangesAsync();
 
             return true;
