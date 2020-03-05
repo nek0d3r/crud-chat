@@ -88,10 +88,10 @@ namespace crud_chat.Services
             return ResultType.Ok;
         }
 
-        public async Task<ResultType> Delete(IEnumerable<long> messages)
+        public async Task<List<long>> Delete(IEnumerable<long> messages)
         {
             if(_context == null)
-                return ResultType.ContextError;
+                return null;
 
             var selectMessageQuery = from message in _context.Set<Message>()
                 where messages.Contains(message.MessageId)
@@ -101,7 +101,7 @@ namespace crud_chat.Services
             _context.Messages.RemoveRange(result);
             await _context.SaveChangesAsync();
 
-            return ResultType.Ok;
+            return new List<long>();
         }
     }
 }

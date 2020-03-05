@@ -95,7 +95,7 @@ namespace crud_chat.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSphere(long id)
         {
-            List<long> rooms = await _sphereService.Delete(id);
+            List<long> rooms = await _sphereService.Delete(new List<long>() { id });
             if(rooms == null)
                 return StatusCode(500);
             if(rooms.Count == 0)
@@ -107,13 +107,11 @@ namespace crud_chat.Controllers
             if(messages.Count == 0)
                 return NoContent();
             
-            switch(await _messageService.Delete(messages))
-            {
-                case ResultType.Ok:
-                    return NoContent();
-                default:
-                    return StatusCode(500);
-            }
+            List<long> result = await _messageService.Delete(messages);
+            if(result == null)
+                return StatusCode(500);
+            
+            return NoContent();
         }
     }
 }
