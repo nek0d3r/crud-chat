@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { SphereForm } from '@app/models/sphere/sphere-form';
 
@@ -15,7 +15,6 @@ export class SphereDialogComponent implements OnInit {
   sphereForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<SphereDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
     const sphereForm: SphereForm = {
@@ -29,7 +28,10 @@ export class SphereDialogComponent implements OnInit {
   ngOnInit() {}
 
   createForm(sphereForm: SphereForm): void {
-    this.sphereForm = this.formBuilder.group(sphereForm);
+    this.sphereForm = new FormGroup({
+      name: new FormControl(sphereForm.name, [Validators.required]),
+      description: new FormControl(sphereForm.description, [Validators.required])
+    });
   }
 
   close(): void {
@@ -37,8 +39,11 @@ export class SphereDialogComponent implements OnInit {
   }
 
   save(): void {
-    const result: SphereForm = Object.assign({}, this.sphereForm.value);
-    this.dialogRef.close({ name: result.name, description: result.description });
+    if(this.sphereForm.valid)
+    {
+      const result: SphereForm = Object.assign({}, this.sphereForm.value);
+      this.dialogRef.close({ name: result.name, description: result.description });
+    }
   }
 
 }

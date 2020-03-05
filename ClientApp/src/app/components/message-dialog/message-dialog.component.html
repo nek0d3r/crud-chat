@@ -1,12 +1,13 @@
-<form [formGroup]="messageForm">
+<form (ngSubmit)="save()" [formGroup]="messageForm">
     <h2 mat-dialog-title>{{ this.dialogTitle }}</h2>
     <mat-dialog-content fxLayout="column">
         <mat-form-field>
             <input matInput formControlName="content" placeholder="Message" />
         </mat-form-field>
+        <h6 class="bad-feedback" *ngIf="messageForm.controls['content'].invalid && messageForm.controls['content'].dirty">Message is required</h6>
     </mat-dialog-content>
     <mat-dialog-actions class="mb-2">
         <button class="mat-raised-button mr-4 px-2" (click)="close()">Close</button>
-        <button class="mat-raised-button mat-accent px-2" (click)="save()">Save</button>
+        <button class="mat-raised-button mat-accent px-2" type="submit">Save</button>
     </mat-dialog-actions>
 </form>

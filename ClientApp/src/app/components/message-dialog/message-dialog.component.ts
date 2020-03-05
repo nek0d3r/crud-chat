@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { MessageForm } from '@app/models/message/message-form';
 
@@ -15,7 +15,6 @@ export class MessageDialogComponent implements OnInit {
   messageForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<MessageDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
     const messageForm: MessageForm = {
@@ -28,7 +27,9 @@ export class MessageDialogComponent implements OnInit {
   ngOnInit() { }
 
   createForm(messageForm: MessageForm): void {
-    this.messageForm = this.formBuilder.group(messageForm);
+    this.messageForm = new FormGroup({
+      content: new FormControl(messageForm.content, [Validators.required])
+    });
   }
 
   close(): void {
@@ -36,8 +37,11 @@ export class MessageDialogComponent implements OnInit {
   }
 
   save(): void {
-    const messageForm: MessageForm = Object.assign({}, this.messageForm.value);
-    this.dialogRef.close({ content: messageForm.content });
+    if(this.messageForm.valid)
+    {
+      const messageForm: MessageForm = Object.assign({}, this.messageForm.value);
+      this.dialogRef.close({ content: messageForm.content });
+    }
   }
 
 }

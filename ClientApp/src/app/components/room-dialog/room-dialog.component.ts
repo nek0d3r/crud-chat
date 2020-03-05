@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { RoomForm } from '@app/models/room/room-form';
 
@@ -15,7 +15,6 @@ export class RoomDialogComponent implements OnInit {
   roomForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<RoomDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
     const roomForm: RoomForm = {
@@ -28,7 +27,9 @@ export class RoomDialogComponent implements OnInit {
   ngOnInit() { }
 
   createForm(roomForm: RoomForm): void {
-    this.roomForm = this.formBuilder.group(roomForm);
+    this.roomForm = new FormGroup({
+      title: new FormControl(roomForm.title, [Validators.required])
+    });
   }
 
   close(): void {
@@ -36,8 +37,11 @@ export class RoomDialogComponent implements OnInit {
   }
 
   save(): void {
-    const roomForm: RoomForm = Object.assign({}, this.roomForm.value);
-    this.dialogRef.close({ title: roomForm.title });
+    if(this.roomForm.valid)
+    {
+      const roomForm: RoomForm = Object.assign({}, this.roomForm.value);
+      this.dialogRef.close({ title: roomForm.title });
+    }
   }
 
 }

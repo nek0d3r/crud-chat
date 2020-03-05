@@ -9,3 +9,4 @@ button { outline: none !important; }
 .hover-visible-parent:hover .hover-visibility { visibility: visible; }
 .hover-visibility { visibility: hidden; }
 .single-line-clamp { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bad-feedback { color: #F44336; font-weight: normal; font-size: smaller; }

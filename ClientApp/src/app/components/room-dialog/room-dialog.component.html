@@ -1,12 +1,18 @@
-<form [formGroup]="roomForm">
+<form (ngSubmit)="save()" [formGroup]="roomForm">
     <h2 mat-dialog-title>{{ this.dialogTitle }}</h2>
     <mat-dialog-content fxLayout="column">
         <mat-form-field>
             <input matInput formControlName="title" placeholder="Title" />
         </mat-form-field>
+        <h6 class="bad-feedback"
+            *ngIf="roomForm.controls['title'].invalid &&
+                   (roomForm.controls['title'].dirty ||
+                   roomForm.controls['title'].touched)">
+            Title is required
+        </h6>
     </mat-dialog-content>
     <mat-dialog-actions class="mb-2">
         <button class="mat-raised-button mr-4 px-2" (click)="close()">Close</button>
-        <button class="mat-raised-button mat-accent px-2" (click)="save()">Save</button>
+        <button class="mat-raised-button mat-accent px-2" type="submit">Save</button>
 </mat-dialog-actions>
 </form>
