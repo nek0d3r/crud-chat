@@ -14,6 +14,8 @@ namespace crud_chat.Models
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public CrudChatContext(DbContextOptions<CrudChatContext> options)
             : base(options)
         {

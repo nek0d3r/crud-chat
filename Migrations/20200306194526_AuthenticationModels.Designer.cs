@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using crud_chat.Models;
 
 namespace crud_chat.Migrations
 {
     [DbContext(typeof(CrudChatContext))]
-    partial class CrudChatContextModelSnapshot : ModelSnapshot
+    [Migration("20200306194526_AuthenticationModels")]
+    partial class AuthenticationModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

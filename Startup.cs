@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using crud_chat.Models;
 using crud_chat.Services;
 
@@ -31,9 +35,9 @@ namespace crud_chat
             services.AddTransient<RoomService>();
             services.AddTransient<MessageService>();
 
-            services.AddTransient<ServiceResolver>(serviceProvider => key =>
+            services.AddTransient<ServiceResolver>(serviceProvider => service =>
             {
-                switch(key)
+                switch(service)
                 {
                     case ServiceType.SPHERE:
                         return serviceProvider.GetService<SphereService>();
@@ -45,6 +49,45 @@ namespace crud_chat
                         throw new KeyNotFoundException();
                 }
             });
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt =>
+            {
+                jwt.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userId = long.Parse(context.Principal.Identity.Name);
+                        var user = userService.Get(userId);
+                        if(user == null)
+                        {
+                            context.Fail("Unauthorized");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                jwt.RequireHttpsMetadata = false;
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -76,6 +119,9 @@ namespace crud_chat
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
