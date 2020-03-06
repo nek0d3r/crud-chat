@@ -1,7 +1,7 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
 
@@ -13,27 +13,22 @@ namespace crud_chat.Services
 
         public RoomService(CrudChatContext context) => _context = context;
 
-        public async Task<ActionResult<IEnumerable<IModel>>> GetAll()
+        public async Task<IEnumerable<IModel>> GetAll()
         {
-            if(_context == null)
-                return null;
-            
             return await _context.Rooms.ToListAsync();
         }
 
-        public async Task<ActionResult<IModel>> Get(long id)
+        public async Task<IModel> Get(long id)
         {
-            if(_context == null)
-                return null;
+            IModel result = await _context.Rooms.FindAsync(id);
+            if(result == null)
+                throw new Exception("Failed to get room");
             
-            return await _context.Rooms.FindAsync(id);
+            return result;
         }
 
-        public async Task<ActionResult<IEnumerable<IModel>>> Get(IEnumerable<long> rooms)
+        public async Task<IEnumerable<IModel>> Get(IEnumerable<long> rooms)
         {
-            if(_context == null)
-                return null;
-
             var selectRoomQuery = from room in _context.Set<Room>()
                 where rooms.Contains(room.RoomId)
                 select room;
@@ -43,9 +38,6 @@ namespace crud_chat.Services
 
         public async Task<IEnumerable<long>> GetMessages(long id)
         {
-            if(_context == null)
-                return null;
-            
             var messageSelectQuery = from roomMessages in _context.Set<RoomMessages>()
                 where roomMessages.RoomId == id
                 select roomMessages.MessageId;
@@ -55,9 +47,6 @@ namespace crud_chat.Services
 
         public async Task<bool> Add(IModel room)
         {
-            if(_context == null)
-                return false;
-            
             _context.Rooms.Add((Room) room);
             await _context.SaveChangesAsync();
 
@@ -66,9 +55,6 @@ namespace crud_chat.Services
 
         public async Task<bool> AddMessage(long id, IModel message)
         {
-            if(_context == null)
-                return false;
-            
             _context.Messages.Add((Message) message);
             await _context.SaveChangesAsync();
             _context.RoomMessages.Add(new RoomMessages { RoomId = id, MessageId = ((Message) message).MessageId });
@@ -79,9 +65,6 @@ namespace crud_chat.Services
 
         public async Task<bool> Change(IModel room)
         {
-            if(_context == null)
-                return false;
-            
             _context.Entry((Room) room).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
@@ -90,9 +73,6 @@ namespace crud_chat.Services
 
         public async Task<List<long>> Delete(IEnumerable<long> rooms)
         {
-            if(_context == null)
-                return null;
-            
             var selectRoomMessageQuery = from roomMessage in _context.Set<RoomMessages>()
                 join room in _context.Set<Room>()
                 on roomMessage.RoomId equals room.RoomId

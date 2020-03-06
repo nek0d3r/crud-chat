@@ -25,22 +25,22 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IModel>>> GetAllSpheres()
         {
-            ActionResult<IEnumerable<IModel>> result = await _sphereService.GetAll();
+            IEnumerable<IModel> result = await _sphereService.GetAll();
             if(result == null)
                 return StatusCode(500);
             else
-                return result;
+                return Ok(result);
         }
 
         // GET: api/Sphere/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IModel>> GetSphere(long id)
         {
-            ActionResult<IModel> result = await _roomService.Get(id);
+            IModel result = await _roomService.Get(id);
             if(result == null)
                 return StatusCode(500);
             else
-                return await _sphereService.Get(id);
+                return Ok(result);
         }
 
         // GET: api/Sphere/5/rooms
@@ -51,7 +51,7 @@ namespace crud_chat.Controllers
             if(sphereRooms == null)
                 return StatusCode(500);
             else
-                return await _roomService.Get(sphereRooms);
+                return Ok(await _roomService.Get(sphereRooms));
         }
 
         // POST: api/Sphere

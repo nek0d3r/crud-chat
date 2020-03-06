@@ -1,7 +1,7 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
 
@@ -13,27 +13,22 @@ namespace crud_chat.Services
 
         public MessageService(CrudChatContext context) => _context = context;
 
-        public async Task<ActionResult<IEnumerable<IModel>>> GetAll()
+        public async Task<IEnumerable<IModel>> GetAll()
         {
-            if(_context == null)
-                return null;
-            
             return await _context.Messages.ToListAsync();
         }
 
-        public async Task<ActionResult<IModel>> Get(long id)
+        public async Task<IModel> Get(long id)
         {
-            if(_context == null)
-                return null;
-            
-            return await _context.Messages.FindAsync(id);
+            IModel result = await _context.Messages.FindAsync(id);
+            if(result == null)
+                throw new Exception("Failed to get message");
+
+            return result;
         }
 
-        public async Task<ActionResult<IEnumerable<IModel>>> Get(IEnumerable<long> messages)
+        public async Task<IEnumerable<IModel>> Get(IEnumerable<long> messages)
         {
-            if(_context == null)
-                return null;
-
             var selectMessageQuery = from message in _context.Set<Message>()
                 where messages.Contains(message.MessageId)
                 select message;
@@ -43,9 +38,6 @@ namespace crud_chat.Services
 
         public async Task<bool> Add(IModel message)
         {
-            if(_context == null)
-                return false;
-            
             _context.Messages.Add((Message) message);
             await _context.SaveChangesAsync();
 
@@ -54,26 +46,18 @@ namespace crud_chat.Services
 
         public async Task<bool> Change(IModel message)
         {
-            if(_context == null)
-                return false;
-            
             _context.Entry((Message) message).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<ResultType> Delete(long id)
+        public async Task<bool> Delete(long id)
         {
-            if(_context == null)
-                return ResultType.ContextError;
-            
             Message message = await _context.Messages.FindAsync(id);
 
             if(message == null)
-            {
-                return ResultType.NotFound;
-            }
+                return true;
 
             _context.Messages.Remove(message);
 
@@ -85,14 +69,11 @@ namespace crud_chat.Services
 
             await _context.SaveChangesAsync();
 
-            return ResultType.Ok;
+            return true;
         }
 
         public async Task<List<long>> Delete(IEnumerable<long> messages)
         {
-            if(_context == null)
-                return null;
-
             var selectMessageQuery = from message in _context.Set<Message>()
                 where messages.Contains(message.MessageId)
                 select message;

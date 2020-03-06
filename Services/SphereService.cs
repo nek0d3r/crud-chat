@@ -1,7 +1,7 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using crud_chat.Models;
 
@@ -13,27 +13,22 @@ namespace crud_chat.Services
 
         public SphereService(CrudChatContext context) => _context = context;
 
-        public async Task<ActionResult<IEnumerable<IModel>>> GetAll()
+        public async Task<IEnumerable<IModel>> GetAll()
         {
-            if(_context == null)
-                return null;
-            
             return await _context.Spheres.ToListAsync();
         }
 
-        public async Task<ActionResult<IModel>> Get(long id)
+        public async Task<IModel> Get(long id)
         {
-            if(_context == null)
-                return null;
+            IModel result = await _context.Spheres.FindAsync(id);
+            if(result == null)
+                throw new Exception("Failed to get sphere");
             
-            return await _context.Spheres.FindAsync(id);
+            return result;
         }
 
         public async Task<IEnumerable<long>> GetRooms(long id)
         {
-            if(_context == null)
-                return null;
-            
             var roomSelectQuery = from sphereRooms in _context.Set<SphereRooms>()
                 where sphereRooms.SphereId == id
                 select sphereRooms.RoomId;
@@ -43,9 +38,6 @@ namespace crud_chat.Services
 
         public async Task<bool> Add(IModel sphere)
         {
-            if(_context == null)
-                return false;
-            
             _context.Spheres.Add((Sphere) sphere);
             await _context.SaveChangesAsync();
 
@@ -54,9 +46,6 @@ namespace crud_chat.Services
 
         public async Task<bool> AddRoom(long id, IModel room)
         {
-            if(_context == null)
-                return false;
-            
             _context.Rooms.Add((Room) room);
             await _context.SaveChangesAsync();
             _context.SphereRooms.Add(new SphereRooms { SphereId = id, RoomId = ((Room) room).RoomId });
@@ -67,9 +56,6 @@ namespace crud_chat.Services
 
         public async Task<bool> Change(IModel sphere)
         {
-            if(_context == null)
-                return false;
-            
             _context.Entry((Sphere) sphere).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
@@ -78,9 +64,6 @@ namespace crud_chat.Services
 
         public async Task<List<long>> Delete(IEnumerable<long> ids)
         {
-            if(_context == null)
-                return null;
-            
             var sphereQuery = from sphere in _context.Set<Sphere>()
                 where ids.Contains(sphere.SphereId)
                 select sphere;

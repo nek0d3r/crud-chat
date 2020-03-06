@@ -18,22 +18,22 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IModel>>> GetAllMessages()
         {
-            ActionResult<IEnumerable<IModel>> result = await _messageService.GetAll();
+            IEnumerable<IModel> result = await _messageService.GetAll();
             if(result == null)
                 return StatusCode(500);
             else
-                return result;
+                return Ok(result);
         }
 
         // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IModel>> GetMessage(long id)
         {
-            ActionResult<IModel> result = await _messageService.Get(id);
+            IModel result = await _messageService.Get(id);
             if(result == null)
                 return StatusCode(500);
             else
-                return await _messageService.Get(id);
+                return Ok(await _messageService.Get(id));
         }
 
         // PUT: api/Message/5
@@ -54,15 +54,9 @@ namespace crud_chat.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(long id)
         {
-            switch(await _messageService.Delete(id))
-            {
-                case ResultType.NotFound:
-                    return NotFound();
-                case ResultType.Ok:
-                    return NoContent();
-                default:
-                    return StatusCode(500);
-            }
+            await _messageService.Delete(id);
+            
+            return NoContent();
         }
     }
 }

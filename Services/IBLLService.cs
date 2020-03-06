@@ -9,9 +9,9 @@ namespace crud_chat.Services
 
     public interface IBLLService
     {
-        Task<ActionResult<IEnumerable<IModel>>> GetAll();
+        Task<IEnumerable<IModel>> GetAll();
 
-        Task<ActionResult<IModel>> Get(long id);
+        Task<IModel> Get(long id);
 
         Task<bool> Add(IModel model);
 

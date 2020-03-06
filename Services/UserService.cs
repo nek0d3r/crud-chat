@@ -17,9 +17,6 @@ namespace crud_chat.Services
 
         public async Task<User> Authenticate(string username, string password)
         {
-            if(_context == null)
-                return null;
-            
             if(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
             
@@ -39,25 +36,16 @@ namespace crud_chat.Services
 
         public async Task<IEnumerable<User>> GetAll()
         {
-            if(_context == null)
-                return null;
-            
             return await _context.Users.ToListAsync();
         }
 
         public async Task<User> Get(long id)
         {
-            if(_context == null)
-                return null;
-            
             return await _context.Users.FindAsync(id);
         }
 
         public async Task<User> Add(User user, string password)
         {
-            if(_context == null)
-                return null;
-            
             if(string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Password is required");
 
@@ -78,9 +66,6 @@ namespace crud_chat.Services
 
         public async Task<ResultType> Change(User user, string password = null)
         {
-            if(_context == null)
-                return ResultType.ContextError;
-            
             User result = _context.Users.Find(user.UserId);
 
             if(result == null)
@@ -111,9 +96,6 @@ namespace crud_chat.Services
 
         public async Task<ResultType> Delete(long id)
         {
-            if(_context == null)
-                return ResultType.ContextError;
-
             User user = await _context.Users.FindAsync(id);
 
             if(user != null)

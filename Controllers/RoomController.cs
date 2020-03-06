@@ -23,22 +23,22 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IModel>>> GetAllRooms()
         {
-            ActionResult<IEnumerable<IModel>> result = await _roomService.GetAll();
+            IEnumerable<IModel> result = await _roomService.GetAll();
             if(result == null)
                 return StatusCode(500);
             else
-                return result;
+                return Ok(result);
         }
 
         // GET: api/Room/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IModel>> GetRoom(long id)
         {
-            ActionResult<IModel> result = await _roomService.Get(id);
+            IModel result = await _roomService.Get(id);
             if(result == null)
                 return StatusCode(500);
             else
-                return await _roomService.Get(id);
+                return Ok(await _roomService.Get(id));
         }
 
         // GET: api/Room/5/messages
@@ -49,7 +49,7 @@ namespace crud_chat.Controllers
             if(roomMessages == null)
                 return StatusCode(500);
             else
-                return await _messageService.Get(roomMessages);
+                return Ok(await _messageService.Get(roomMessages));
         }
 
         // POST: api/Room/5/messages
