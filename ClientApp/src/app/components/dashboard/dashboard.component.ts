@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 
 import { SphereService } from '@app/services/sphere/sphere.service';
 
@@ -19,7 +19,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private sphereService: SphereService) { }
+    private sphereService: SphereService,
+    private snackBar: MatSnackBar) { }
 
   getSpheres(): void {
     this.sphereService.getAllSpheres().subscribe(_ => { if(_ !== null) { this.spheres = _ } });
@@ -27,7 +28,12 @@ export class DashboardComponent implements OnInit {
 
   addSphere(name: string, desc: string): void {
     const sphere: Sphere = { sphereId: 0, name: name, description: desc, dateCreated: new Date() };
-    this.sphereService.postSphere(sphere).subscribe(_ => { if(_ !== null) { this.spheres.push(_) } });
+    this.sphereService.postSphere(sphere).subscribe(_ => {
+      if(_ !== null) {
+        this.spheres.push(_);
+        this.snackBar.open('Successfully added sphere', 'Dismiss', { duration: 2000 });
+      }
+    });
   }
 
   changeSphere(id: number, name: string, desc: string): void {
@@ -37,15 +43,15 @@ export class DashboardComponent implements OnInit {
     this.sphereService.putSphere(id, sphere).subscribe(_ => {
       if(_ !== null) {
         this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === _.sphereId)), 1, _);
+        this.snackBar.open('Successfully changed sphere', 'Dismiss', { duration: 2000 });
       }
     });
   }
 
   deleteSphere(id: number): void {
     this.sphereService.deleteSphere(id).subscribe(_ => {
-      if(_ !== null) {
-        this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
-      }
+      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
+      this.snackBar.open('Successfully deleted sphere', 'Dismiss', { duration: 2000 });
     });
   }
 

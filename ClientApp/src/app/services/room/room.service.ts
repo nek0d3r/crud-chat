@@ -6,7 +6,7 @@ import { Room } from '@app/models/room/room';
 import { Message } from '@app/models/message/message';
 
 import { MatSnackBar } from '@angular/material';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

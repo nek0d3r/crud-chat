@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 
 import { SphereService } from '@app/services/sphere/sphere.service';
 import { RoomService } from '@app/services/room/room.service';
@@ -27,7 +27,8 @@ export class RoomsComponent implements OnInit {
     private dialog: MatDialog,
     private sphereService: SphereService,
     private roomService: RoomService,
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar) {}
 
   getRooms(): void {
     this.sphereService.getSphereRooms(this.sphereId).subscribe(_ => { if(_ !== null) { this.rooms = _ } })
@@ -35,7 +36,12 @@ export class RoomsComponent implements OnInit {
 
   addRoom(title: string): void {
     const room: Room = { roomId: 0, title: title, dateCreated: new Date() };
-    this.sphereService.postSphereRoom(this.sphereId, room).subscribe(_ => { if(_ !== null) { this.rooms.push(_) } });
+    this.sphereService.postSphereRoom(this.sphereId, room).subscribe(_ => {
+      if(_ !== null) {
+        this.rooms.push(_);
+        this.snackBar.open('Successfully added room', 'Dismiss', { duration: 2000 });
+      }
+    });
   }
 
   changeRoom(id: number, title: string): void {
@@ -44,15 +50,15 @@ export class RoomsComponent implements OnInit {
     this.roomService.putRoom(id, room).subscribe(_ => {
       if(_ !== null) {
         this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === _.roomId)), 1, _);
+        this.snackBar.open('Successfully changed room', 'Dismiss', { duration: 2000 });
       }
     });
   }
 
   deleteRoom(id: number): void {
     this.roomService.deleteRoom(id).subscribe(_ => {
-      if(_ !== null) {
-        this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
-      }
+      this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
+      this.snackBar.open('Successfully deleted room', 'Dismiss', { duration: 2000 });
     });
   }
 

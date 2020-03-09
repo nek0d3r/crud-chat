@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatDialogConfig, MatDialog } from '@angular/material';
+import { MatDialogConfig, MatDialog, MatSnackBar } from '@angular/material';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { SphereService } from '@app/services/sphere/sphere.service';
@@ -39,7 +39,8 @@ export class MessagesComponent implements OnInit {
     private sphereService: SphereService,
     private roomService: RoomService,
     private messageService: MessageService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar) {
       const messageForm: MessageForm = {
         content: ''
       };
@@ -56,7 +57,11 @@ export class MessagesComponent implements OnInit {
 
   addMessage(id: number, content: string): void {
     const message: Message = { messageId: 0, content: content, lastModified: new Date() };
-    this.roomService.postRoomMessage(id, message).subscribe(_ => { if(_ !== null) { this.messages.push(_) } });
+    this.roomService.postRoomMessage(id, message).subscribe(_ => {
+      if(_ !== null) {
+        this.messages.push(_);
+      }
+    });
   }
 
   changeMessage(id: number, content: string): void {
@@ -66,15 +71,15 @@ export class MessagesComponent implements OnInit {
     this.messageService.putMessage(id, message).subscribe(_ => {
       if(_ !== null) {
         this.messages.splice(this.messages.indexOf(this.messages.find(m => m.messageId === _.messageId)), 1, _);
+        this.snackBar.open('Successfully changed message', 'Dismiss', { duration: 2000 });
       }
     });
   }
 
   deleteMessage(id: number): void {
     this.messageService.deleteMessage(id).subscribe(_ => {
-      if(_ !== null) {
-        this.messages.splice(this.messages.indexOf(this.messages.find(m => m.messageId === id)), 1);
-      }
+      this.messages.splice(this.messages.indexOf(this.messages.find(m => m.messageId === id)), 1);
+      this.snackBar.open('Successfully deleted message', 'Dismiss', { duration: 2000 });
     });
   }
 
