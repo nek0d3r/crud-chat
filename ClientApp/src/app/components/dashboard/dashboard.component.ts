@@ -22,12 +22,12 @@ export class DashboardComponent implements OnInit {
     private sphereService: SphereService) { }
 
   getSpheres(): void {
-    this.sphereService.getAllSpheres().subscribe(_ => this.spheres = _);
+    this.sphereService.getAllSpheres().subscribe(_ => { if(_ !== null) { this.spheres = _ } });
   }
 
   addSphere(name: string, desc: string): void {
     const sphere: Sphere = { sphereId: 0, name: name, description: desc, dateCreated: new Date() };
-    this.sphereService.postSphere(sphere).subscribe(_ => this.spheres.push(_));
+    this.sphereService.postSphere(sphere).subscribe(_ => { if(_ !== null) { this.spheres.push(_) } });
   }
 
   changeSphere(id: number, name: string, desc: string): void {
@@ -35,13 +35,17 @@ export class DashboardComponent implements OnInit {
     sphere.name = name;
     sphere.description = desc;
     this.sphereService.putSphere(id, sphere).subscribe(_ => {
-      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === _.sphereId)), 1, _);
+      if(_ !== null) {
+        this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === _.sphereId)), 1, _);
+      }
     });
   }
 
   deleteSphere(id: number): void {
     this.sphereService.deleteSphere(id).subscribe(_ => {
-      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
+      if(_ !== null) {
+        this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
+      }
     });
   }
 

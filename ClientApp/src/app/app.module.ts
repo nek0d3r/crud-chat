@@ -13,7 +13,8 @@ import {
   MatFormFieldModule,
   MatListModule,
   MatDialogModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { AppComponent } from '@app/app.component';
@@ -53,7 +54,8 @@ import { MessageDialogComponent } from '@app/components/message-dialog/message-d
     MatFormFieldModule,
     MatListModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent],

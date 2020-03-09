@@ -30,25 +30,29 @@ export class RoomsComponent implements OnInit {
     private route: ActivatedRoute) {}
 
   getRooms(): void {
-    this.sphereService.getSphereRooms(this.sphereId).subscribe(_ => this.rooms = _)
+    this.sphereService.getSphereRooms(this.sphereId).subscribe(_ => { if(_ !== null) { this.rooms = _ } })
   }
 
   addRoom(title: string): void {
     const room: Room = { roomId: 0, title: title, dateCreated: new Date() };
-    this.sphereService.postSphereRoom(this.sphereId, room).subscribe(_ => this.rooms.push(_));
+    this.sphereService.postSphereRoom(this.sphereId, room).subscribe(_ => { if(_ !== null) { this.rooms.push(_) } });
   }
 
   changeRoom(id: number, title: string): void {
     const room: Room = this.rooms.find(_ => _.roomId === id);
     room.title = title;
     this.roomService.putRoom(id, room).subscribe(_ => {
-      this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === _.roomId)), 1, _);
+      if(_ !== null) {
+        this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === _.roomId)), 1, _);
+      }
     });
   }
 
   deleteRoom(id: number): void {
     this.roomService.deleteRoom(id).subscribe(_ => {
-      this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
+      if(_ !== null) {
+        this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
+      }
     });
   }
 

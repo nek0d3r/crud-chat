@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -25,56 +26,91 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IModel>>> GetAllSpheres()
         {
-            IEnumerable<IModel> result = await _sphereService.GetAll();
-            if(result == null)
-                return StatusCode(500);
-            else
-                return Ok(result);
+            try
+            {
+                IEnumerable<IModel> result = await _sphereService.GetAll();
+                if(result == null)
+                    return StatusCode(500);
+                else
+                    return Ok(result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // GET: api/Sphere/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IModel>> GetSphere(long id)
         {
-            IModel result = await _roomService.Get(id);
-            if(result == null)
-                return StatusCode(500);
-            else
-                return Ok(result);
+            try
+            {
+                IModel result = await _sphereService.Get(id);
+                if(result == null)
+                    return StatusCode(500);
+                else
+                    return Ok(result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // GET: api/Sphere/5/rooms
         [HttpGet("{id}/rooms")]
         public async Task<ActionResult<IEnumerable<IModel>>> GetSphereRooms(long id)
         {
-            IEnumerable<long> sphereRooms = await _sphereService.GetRooms(id);
-            if(sphereRooms == null)
-                return StatusCode(500);
-            else
-                return Ok(await _roomService.Get(sphereRooms));
+            try
+            {
+                IEnumerable<long> sphereRooms = await _sphereService.GetRooms(id);
+                if(sphereRooms == null)
+                    return StatusCode(500);
+                else
+                    return Ok(await _roomService.Get(sphereRooms));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // POST: api/Sphere
         [HttpPost]
         public async Task<ActionResult<IModel>> PostSphere(Sphere sphere)
         {
-            bool ok = await _sphereService.Add(sphere);
-            if(!ok)
-                return StatusCode(500);
-            else
-                return CreatedAtAction(nameof(GetSphere), new { id = ((Sphere)sphere).SphereId }, sphere);
+            try
+            {
+                bool ok = await _sphereService.Add(sphere);
+                if(!ok)
+                    return StatusCode(500);
+                else
+                    return CreatedAtAction(nameof(GetSphere), new { id = ((Sphere)sphere).SphereId }, sphere);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // POST: api/Sphere/5/rooms
         [HttpPost("{id}/rooms")]
         public async Task<ActionResult<IModel>> PostSphereRoom(long id, Room room)
         {
-            bool ok = await _sphereService.AddRoom(id, room);
-            
-            if(!ok)
-                return StatusCode(500);
-            else
-                return CreatedAtAction(nameof(MessageController.GetMessage), new { id = room.RoomId }, room);
+            try
+            {
+                bool ok = await _sphereService.AddRoom(id, room);
+                
+                if(!ok)
+                    return StatusCode(500);
+                else
+                    return CreatedAtAction(nameof(MessageController.GetMessage), new { id = room.RoomId }, room);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // PUT: api/Sphere/5
@@ -84,34 +120,48 @@ namespace crud_chat.Controllers
             if(id != sphere.SphereId)
                 return BadRequest();
             
-            bool ok = await _sphereService.Change(sphere);
-            if(!ok)
-                return StatusCode(500);
-            else
-                return CreatedAtAction(nameof(GetSphere), new { id = sphere.SphereId }, sphere);
+            try
+            {
+                bool ok = await _sphereService.Change(sphere);
+                if(!ok)
+                    return StatusCode(500);
+                else
+                    return CreatedAtAction(nameof(GetSphere), new { id = sphere.SphereId }, sphere);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // DELETE: api/Sphere/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSphere(long id)
         {
-            List<long> rooms = await _sphereService.Delete(new List<long>() { id });
-            if(rooms == null)
-                return StatusCode(500);
-            if(rooms.Count == 0)
+            try
+            {
+                List<long> rooms = await _sphereService.Delete(new List<long>() { id });
+                if(rooms == null)
+                    return StatusCode(500);
+                if(rooms.Count == 0)
+                    return NoContent();
+                
+                List<long> messages = await _roomService.Delete(rooms);
+                if(messages == null)
+                    return StatusCode(500);
+                if(messages.Count == 0)
+                    return NoContent();
+                
+                List<long> result = await _messageService.Delete(messages);
+                if(result == null)
+                    return StatusCode(500);
+                
                 return NoContent();
-            
-            List<long> messages = await _roomService.Delete(rooms);
-            if(messages == null)
-                return StatusCode(500);
-            if(messages.Count == 0)
-                return NoContent();
-            
-            List<long> result = await _messageService.Delete(messages);
-            if(result == null)
-                return StatusCode(500);
-            
-            return NoContent();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

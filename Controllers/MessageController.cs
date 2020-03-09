@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,45 +19,73 @@ namespace crud_chat.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IModel>>> GetAllMessages()
         {
-            IEnumerable<IModel> result = await _messageService.GetAll();
-            if(result == null)
-                return StatusCode(500);
-            else
-                return Ok(result);
+            try
+            {
+                IEnumerable<IModel> result = await _messageService.GetAll();
+                if(result == null)
+                    return StatusCode(500);
+                else
+                    return Ok(result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IModel>> GetMessage(long id)
         {
-            IModel result = await _messageService.Get(id);
-            if(result == null)
-                return StatusCode(500);
-            else
-                return Ok(await _messageService.Get(id));
+            try
+            {
+                IModel result = await _messageService.Get(id);
+                if(result == null)
+                    return StatusCode(500);
+                else
+                    return Ok(await _messageService.Get(id));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // PUT: api/Message/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMessage(long id, Message message)
         {
-            if(id != message.MessageId)
-                return BadRequest();
-            
-            bool ok = await _messageService.Change(message);
-            if(!ok)
-                return StatusCode(500);
-            else
-                return CreatedAtAction(nameof(GetMessage), new { id = message.MessageId }, message);
+            try
+            {
+                if(id != message.MessageId)
+                    return BadRequest();
+                
+                bool ok = await _messageService.Change(message);
+                if(!ok)
+                    return StatusCode(500);
+                else
+                    return CreatedAtAction(nameof(GetMessage), new { id = message.MessageId }, message);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // DELETE: api/Message/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(long id)
         {
-            await _messageService.Delete(id);
-            
-            return NoContent();
+            try
+            {
+                await _messageService.Delete(id);
+
+                return NoContent();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }
