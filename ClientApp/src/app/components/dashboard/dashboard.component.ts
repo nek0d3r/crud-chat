@@ -23,13 +23,13 @@ export class DashboardComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   getSpheres(): void {
-    this.sphereService.getAllSpheres().subscribe(_ => { if(_ !== null) { this.spheres = _ } });
+    this.sphereService.getAllSpheres().subscribe(_ => { if(_ !== undefined) { this.spheres = _ } });
   }
 
   addSphere(name: string, desc: string): void {
     const sphere: Sphere = { sphereId: 0, name: name, description: desc, dateCreated: new Date() };
     this.sphereService.postSphere(sphere).subscribe(_ => {
-      if(_ !== null) {
+      if(_ !== undefined) {
         this.spheres.push(_);
         this.snackBar.open('Successfully added sphere', 'Dismiss', { duration: 2000 });
       }
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
     sphere.name = name;
     sphere.description = desc;
     this.sphereService.putSphere(id, sphere).subscribe(_ => {
-      if(_ !== null) {
+      if(_ !== undefined) {
         this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === _.sphereId)), 1, _);
         this.snackBar.open('Successfully changed sphere', 'Dismiss', { duration: 2000 });
       }
@@ -50,8 +50,11 @@ export class DashboardComponent implements OnInit {
 
   deleteSphere(id: number): void {
     this.sphereService.deleteSphere(id).subscribe(_ => {
-      this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
-      this.snackBar.open('Successfully deleted sphere', 'Dismiss', { duration: 2000 });
+      if(_ !== undefined)
+      {
+        this.spheres.splice(this.spheres.indexOf(this.spheres.find(s => s.sphereId === id)), 1);
+        this.snackBar.open('Successfully deleted sphere', 'Dismiss', { duration: 2000 });
+      }
     });
   }
 

@@ -23,48 +23,48 @@ export class SphereService {
 
   getAllSpheres(): Observable<Sphere[]> {
     return this.http.get<Sphere[]>(this.sphereUri, this.httpOptions).pipe(
-      catchError(this.handleError<Sphere[]>('There was a problem getting spheres', []))
+      catchError(this.handleError<Sphere[]>('There was a problem getting spheres', undefined))
     );
   }
 
   getSphere(id: number): Observable<Sphere> {
     const url = `${this.sphereUri}/${id}`;
     return this.http.get<Sphere>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Sphere>('There was a problem getting the sphere', null))
+      catchError(this.handleError<Sphere>('There was a problem getting the sphere', undefined))
     );
   }
 
   getSphereRooms(id: number): Observable<Room[]> {
     const url = `${this.sphereUri}/${id}/rooms`;
     return this.http.get<Room[]>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Room[]>('There was a problem getting rooms', []))
+      catchError(this.handleError<Room[]>('There was a problem getting rooms', undefined))
     );
   }
 
   postSphere(sphere: Sphere): Observable<Sphere> {
     return this.http.post<Sphere>(this.sphereUri, sphere, this.httpOptions).pipe(
-      catchError(this.handleError<Sphere>('There was a problem adding the sphere', null))
+      catchError(this.handleError<Sphere>('There was a problem adding the sphere', undefined))
     );
   }
 
   postSphereRoom(id: number, room: Room): Observable<Room> {
     const url = `${this.sphereUri}/${id}/rooms`;
     return this.http.post<Room>(url, room, this.httpOptions).pipe(
-      catchError(this.handleError<Room>('There was a problem adding the room', null))
+      catchError(this.handleError<Room>('There was a problem adding the room', undefined))
     );
   }
 
   putSphere(id: number, sphere: Sphere): Observable<Sphere> {
     const url = `${this.sphereUri}/${id}`;
     return this.http.put<Sphere>(url, sphere, this.httpOptions).pipe(
-      catchError(this.handleError<Sphere>('There was a problem updating the sphere', null))
+      catchError(this.handleError<Sphere>('There was a problem updating the sphere', undefined))
     );
   }
 
   deleteSphere(id: number): Observable<Sphere> {
     const url = `${this.sphereUri}/${id}`;
     return this.http.delete<Sphere>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Sphere>('There was a problem deleting the sphere', null))
+      catchError(this.handleError<Sphere>('There was a problem deleting the sphere', undefined))
     );
   }
 

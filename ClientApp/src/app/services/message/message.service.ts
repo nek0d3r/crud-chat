@@ -22,28 +22,28 @@ export class MessageService {
 
   getAllMessages(): Observable<Message[]> {
     return this.http.get<Message[]>(this.messageUri, this.httpOptions).pipe(
-      catchError(this.handleError<Message[]>('There was a problem getting messages', []))
+      catchError(this.handleError<Message[]>('There was a problem getting messages', undefined))
     );
   }
 
   getMessage(id: number): Observable<Message> {
     const url = `${this.messageUri}/${id}`;
     return this.http.get<Message>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Message>('There was a problem getting messages', null))
+      catchError(this.handleError<Message>('There was a problem getting messages', undefined))
     );
   }
 
   putMessage(id: number, message: Message): Observable<Message> {
     const url = `${this.messageUri}/${id}`;
     return this.http.put<Message>(url, message, this.httpOptions).pipe(
-      catchError(this.handleError<Message>('There was a problem saving the message', null))
+      catchError(this.handleError<Message>('There was a problem saving the message', undefined))
     );
   }
 
   deleteMessage(id: number): Observable<Message> {
     const url = `${this.messageUri}/${id}`;
     return this.http.delete<Message>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Message>('There was a problem deleting the message', null))
+      catchError(this.handleError<Message>('There was a problem deleting the message', undefined))
     );
   }
 

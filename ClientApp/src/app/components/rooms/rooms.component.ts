@@ -31,13 +31,13 @@ export class RoomsComponent implements OnInit {
     private snackBar: MatSnackBar) {}
 
   getRooms(): void {
-    this.sphereService.getSphereRooms(this.sphereId).subscribe(_ => { if(_ !== null) { this.rooms = _ } })
+    this.sphereService.getSphereRooms(this.sphereId).subscribe(_ => { if(_ !== undefined) { this.rooms = _ } })
   }
 
   addRoom(title: string): void {
     const room: Room = { roomId: 0, title: title, dateCreated: new Date() };
     this.sphereService.postSphereRoom(this.sphereId, room).subscribe(_ => {
-      if(_ !== null) {
+      if(_ !== undefined) {
         this.rooms.push(_);
         this.snackBar.open('Successfully added room', 'Dismiss', { duration: 2000 });
       }
@@ -48,7 +48,7 @@ export class RoomsComponent implements OnInit {
     const room: Room = this.rooms.find(_ => _.roomId === id);
     room.title = title;
     this.roomService.putRoom(id, room).subscribe(_ => {
-      if(_ !== null) {
+      if(_ !== undefined) {
         this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === _.roomId)), 1, _);
         this.snackBar.open('Successfully changed room', 'Dismiss', { duration: 2000 });
       }
@@ -57,8 +57,11 @@ export class RoomsComponent implements OnInit {
 
   deleteRoom(id: number): void {
     this.roomService.deleteRoom(id).subscribe(_ => {
-      this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
-      this.snackBar.open('Successfully deleted room', 'Dismiss', { duration: 2000 });
+      if(_ !== undefined)
+      {
+        this.rooms.splice(this.rooms.indexOf(this.rooms.find(r => r.roomId === id)), 1);
+        this.snackBar.open('Successfully deleted room', 'Dismiss', { duration: 2000 });
+      }
     });
   }
 

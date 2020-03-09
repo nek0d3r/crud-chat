@@ -52,13 +52,13 @@ export class MessagesComponent implements OnInit {
   }
 
   getMessages(): void {
-    this.roomService.getRoomMessages(this.roomId).subscribe(_ => { if(_ !== null) { this.messages = _ } });
+    this.roomService.getRoomMessages(this.roomId).subscribe(_ => { if(_ !== undefined) { this.messages = _ } });
   }
 
   addMessage(id: number, content: string): void {
     const message: Message = { messageId: 0, content: content, lastModified: new Date() };
     this.roomService.postRoomMessage(id, message).subscribe(_ => {
-      if(_ !== null) {
+      if(_ !== undefined) {
         this.messages.push(_);
       }
     });
@@ -69,7 +69,7 @@ export class MessagesComponent implements OnInit {
     message.content = content;
     message.lastModified = new Date();
     this.messageService.putMessage(id, message).subscribe(_ => {
-      if(_ !== null) {
+      if(_ !== undefined) {
         this.messages.splice(this.messages.indexOf(this.messages.find(m => m.messageId === _.messageId)), 1, _);
         this.snackBar.open('Successfully changed message', 'Dismiss', { duration: 2000 });
       }
@@ -78,8 +78,10 @@ export class MessagesComponent implements OnInit {
 
   deleteMessage(id: number): void {
     this.messageService.deleteMessage(id).subscribe(_ => {
-      this.messages.splice(this.messages.indexOf(this.messages.find(m => m.messageId === id)), 1);
-      this.snackBar.open('Successfully deleted message', 'Dismiss', { duration: 2000 });
+      if(_ !== undefined) {
+        this.messages.splice(this.messages.indexOf(this.messages.find(m => m.messageId === id)), 1);
+        this.snackBar.open('Successfully deleted message', 'Dismiss', { duration: 2000 });
+      }
     });
   }
 

@@ -24,42 +24,42 @@ export class RoomService {
 
   getAllRooms(): Observable<Room[]> {
     return this.http.get<Room[]>(this.roomUri, this.httpOptions).pipe(
-      catchError(this.handleError<Room[]>('There was a problem getting rooms', []))
+      catchError(this.handleError<Room[]>('There was a problem getting rooms', undefined))
     );
   }
 
   getRoom(id: number): Observable<Room> {
     const url = `${this.roomUri}/${id}`;
     return this.http.get<Room>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Room>('There was a problem getting the room', null))
+      catchError(this.handleError<Room>('There was a problem getting the room', undefined))
     );
   }
 
   getRoomMessages(id: number): Observable<Message[]> {
     const url = `${this.roomUri}/${id}/messages`;
     return this.http.get<Message[]>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Message[]>('There was a problem getting messages', []))
+      catchError(this.handleError<Message[]>('There was a problem getting messages', undefined))
     );
   }
 
   postRoomMessage(id: number, message: Message): Observable<Message> {
     const url = `${this.roomUri}/${id}/messages`;
     return this.http.post<Message>(url, message, this.httpOptions).pipe(
-      catchError(this.handleError<Message>('There was a problem adding the message', null))
+      catchError(this.handleError<Message>('There was a problem adding the message', undefined))
     );
   }
 
   putRoom(id: number, room: Room): Observable<Room> {
     const url = `${this.roomUri}/${id}`;
     return this.http.put<Room>(url, room, this.httpOptions).pipe(
-      catchError(this.handleError<Room>('There was a problem updating the room', null))
+      catchError(this.handleError<Room>('There was a problem updating the room', undefined))
     );
   }
 
   deleteRoom(id: number): Observable<Room> {
     const url = `${this.roomUri}/${id}`;
     return this.http.delete<Room>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Room>('There was a problem deleting the room', null))
+      catchError(this.handleError<Room>('There was a problem deleting the room', undefined))
     );
   }
 
